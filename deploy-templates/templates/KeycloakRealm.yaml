@@ -1,0 +1,39 @@
+{{- $root := .Values }}
+{{- $release := .Release }}
+{{- range $realm := .Values.keycloak.realms }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealm
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+  name: {{ $realm.name }}
+spec:
+  keycloakOwner: {{ $realm.keycloakOwner }}
+  realmName:  {{ template "keycloak.realmName" (dict "root" $ "realm" $realm "release" $release) }}
+  ssoRealmEnabled: {{ $realm.ssoRealm.enabled }}
+  {{- if $realm.ssoRealm.enabled }}
+  ssoAutoRedirectEnabled: {{ $realm.ssoRealm.autoRedirectEnabled }}
+  ssoRealmName: {{ tpl $realm.ssoRealm.name $ }}
+  {{- end }}
+  {{- if $realm.users }}
+  users: {{ $realm.users | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $realm.loginTheme }}
+  themes:
+    loginTheme: {{ $realm.loginTheme }}
+  {{- end }}
+  {{- if $realm.loginTheme }}
+  browserSecurityHeaders:
+    {{- if not $root.caIsolation }}
+    contentSecurityPolicy: "frame-src 'self' https://eu.iit.com.ua; frame-ancestors 'self'; object-src 'none';"
+    {{- else }}
+    contentSecurityPolicy: "frame-src 'self' {{ $root.envVariables.signWidgetUrl }}; frame-ancestors 'self'; object-src 'none';"
+    {{- end }}
+  {{- end }}
+  {{- if $realm.browserFlow }}
+  browserFlow: {{ $realm.browserFlow }}
+  {{- end }}
+  {{- end }}

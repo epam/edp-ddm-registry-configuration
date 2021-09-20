@@ -1,0 +1,29 @@
+{{- $root := .Values }}
+{{- $release := .Release }}
+{{- range $scope := .Values.keycloak.clientScopes }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakClientScope
+metadata:
+  name: {{ $scope.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  {{- if $scope.default }}
+  default: {{ $scope.default }}
+ {{- end }}
+  attributes: {}
+  name: {{ $scope.scopeName }}
+  {{- if $scope.realm }}
+  realm: {{ $scope.realm }}
+  {{- end }}
+  description: {{ $scope.description }}
+  {{- if $scope.protocol }}
+  protocol: {{ $scope.protocol }}
+  {{- end }}
+  {{- if $scope.protocolMappers }}
+  protocolMappers: {{ $scope.protocolMappers | toYaml | nindent 4 }}
+  {{- end -}}
+{{- end }}

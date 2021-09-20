@@ -1,0 +1,12 @@
+{{- range $objectBucketClaim := .Values.ceph.objectBucketClaims }}
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ $objectBucketClaim.name }}
+spec:
+  additionalConfig:
+    bucketclass: {{ $objectBucketClaim.bucketclass }}
+  generateBucketName: {{ $objectBucketClaim.name }}
+  storageClassName: {{ $objectBucketClaim.storageClassName }}
+{{- end }}

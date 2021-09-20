@@ -1,0 +1,16 @@
+{{- $root := .Values }}
+{{- range $realmRole := .Values.keycloak.realmRoles }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmRole
+metadata:
+  name: {{ $realmRole.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  composite: {{ $realmRole.composite }}
+  name: {{ $realmRole.name }}
+  realm: {{ $realmRole.realm }}
+{{- end }}

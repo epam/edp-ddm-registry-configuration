@@ -1,0 +1,52 @@
+{{- $root := .Values }}
+{{- $release := .Release }}
+{{- range $client := .Values.keycloak.clients }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: {{ $client.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  clientId: {{ $client.clientId }}
+  public: {{ $client.public }}
+  directAccess: {{ $client.directAccess }}
+  {{- if $client.protocol }}
+  protocol: {{ $client.protocol }}
+  {{- end }}
+  audRequired: {{ $client.audRequired }}
+  {{- if $client.attributes }}
+  attributes: {{ $client.attributes | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if $client.clientRoles }}
+  clientRoles:
+    {{- range $client.clientRoles }}
+    - {{ . }}
+    {{- end }}
+  {{- end }}
+  {{- if not $client.public }}
+  serviceAccount:
+    {{- if $client.serviceAccountAttributes}}
+    attributes: {{ $client.serviceAccountAttributes | toYaml | nindent 6 }}
+    {{- end }}
+    enabled: true
+    {{- if $client.realmRoles }}
+    realmRoles: {{ $client.realmRoles | toYaml | nindent 4 }}
+    {{- end }}
+    {{- if $client.serviceAccountClientRoles }}
+    clientRoles:
+      {{ $client.serviceAccountClientRoles | toYaml | nindent 4 }}
+    {{- end }}
+  secret: {{ $client.secretName }}
+  {{- end }}
+  {{- if $client.protocolMappers }}
+  protocolMappers: {{ $client.protocolMappers | toYaml | nindent 4 }}
+  {{- end }}
+  targetRealm: {{ template "keycloak.realmName" (dict "root" $ "realm" $client.targetRealm "release" $release) }}
+  {{- if $client.webUrl }}
+  webUrl: {{ tpl $client.webUrl $ }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,18 @@
+{{- $root := .Values }}
+{{- range $realmRoleBatch := .Values.keycloak.realmRoleBatches }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmRoleBatch
+metadata:
+  name: {{ $realmRoleBatch.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  realm: {{ $realmRoleBatch.realm }}
+  roles:
+    {{- range  $realmRoleBatch.role.batch.list }}
+      - name: {{ . }}
+    {{- end }}
+{{- end }}

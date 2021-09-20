@@ -1,0 +1,47 @@
+{{- $authflow := (lookup "v1.edp.epam.com/v1alpha1" "KeycloakAuthFlow" .Release.Namespace "citizen-portal-dso-citizen-auth-flow") -}}
+{{- $authFlowSpec := .Values.keycloak.authFlows.citizenAuthFlow }}
+{{- $trembitaConfigValues := .Values.trembitaConfigValues }}
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakAuthFlow
+metadata:
+  name: citizen-portal-dso-citizen-auth-flow
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ .Values.appLabel }}
+spec:
+  alias: dso-citizen-auth-flow
+  authenticationExecutions:
+    - authenticator: auth-cookie
+      authenticatorFlow: false
+      priority: 0
+      requirement: ALTERNATIVE
+    - authenticator: ds-citizen-authenticator
+      authenticatorConfig:
+        alias: ds-citizen-authenticator-configuration
+        config:
+          citizenDefaultRoles: citizen;unregistered-individual;
+          widgetUrl: '{{ .Values.envVariables.signWidgetUrl }}'
+          dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
+          entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
+          themeFile: white-theme.js
+          esignHintUrl: https://diia.gov.ua/faq/1
+          legalDefaultRoles: citizen;unregistered-legal;
+          startPageUrl: >-
+            https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}/login
+          {{- range $key,$value := $trembitaConfigValues }}
+          {{- if $authflow }}
+          {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
+          {{ $key }}: {{ get (get (get $ae "authenticatorConfig") "config") $key | squote }}
+          {{- else }}
+          {{ $key }}: {{ $value | squote }}
+          {{- end }}
+          {{- end }}
+      authenticatorFlow: false
+      priority: 1
+      requirement: ALTERNATIVE
+  builtIn: false
+  description: ''
+  providerId: basic-flow
+  realm: citizen-portal
+  topLevel: true

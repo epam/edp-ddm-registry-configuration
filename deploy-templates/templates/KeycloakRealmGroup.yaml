@@ -1,0 +1,15 @@
+{{- $root := .Values }}
+{{- range $realmGroup := .Values.keycloak.realmGroups }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmGroup
+metadata:
+  name: {{ $realmGroup.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  name: {{ $realmGroup.name }}
+  realm: {{ $realmGroup.realm }}
+{{- end -}}

@@ -1,0 +1,208 @@
+{{- define "secret-value" }}
+  {{- $secretName := .secretName }}
+  {{- $namespace := .namespace }}
+  {{- $secret := (lookup "v1" "Secret" $namespace $secretName) }}
+  {{- if $secret }}
+  {{- $secret.data.clientSecret }}
+  {{- else }}
+  {{- uuidv4 | b64enc }}
+  {{- end }}
+  {{- end }}
+
+  {{- define "keycloak.url" -}}
+  {{- printf "%s%s" "https://" .Values.keycloak.host }}
+  {{- end -}}
+
+---
+{{- $secretName := (printf "keycloak-client.%s-%s.secret" .Release.Namespace "citizen-portal") }}
+  {{- $secretValue := include "secret-value" (dict "secretName" $secretName "namespace" "user-management") }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  namespace: user-management
+  labels:
+    relatedNamespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+type: Opaque
+data:
+  clientSecret: {{ $secretValue | squote }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: {{ .Release.Namespace }}-citizen-portal
+  namespace: user-management
+  labels:
+    relatedNamespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  clientId: {{ .Release.Namespace }}-citizen-portal
+  advancedProtocolMappers: false
+  audRequired: false
+  directAccess: false
+  public: false
+  secret: {{ $secretName }}
+  targetRealm: id-gov-ua
+  webUrl: ''
+  protocolMappers:
+    - config:
+        jsonType.label: String
+        name: drfo
+        multivalued: 'false'
+        userinfo.token.claim: 'true'
+        aggregate.attrs: 'false'
+        id.token.claim: 'true'
+        user.attribute: drfo
+        claim.name: drfo
+        access.token.claim: 'true'
+      name: drfo
+      protocol: openid-connect
+      protocolMapper: oidc-usermodel-attribute-mapper
+    - config:
+        jsonType.label: String
+        name: fullName
+        multivalued: 'false'
+        userinfo.token.claim: 'true'
+        aggregate.attrs: 'false'
+        id.token.claim: 'true'
+        user.attribute: fullName
+        claim.name: fullName
+        access.token.claim: 'true'
+      name: fullName
+      protocol: openid-connect
+      protocolMapper: oidc-usermodel-attribute-mapper
+    - config:
+        jsonType.label: String
+        name: edrpou
+        multivalued: 'false'
+        userinfo.token.claim: 'true'
+        aggregate.attrs: 'false'
+        id.token.claim: 'true'
+        user.attribute: edrpou
+        claim.name: edrpou
+        access.token.claim: 'true'
+      name: edrpou
+      protocol: openid-connect
+      protocolMapper: oidc-usermodel-attribute-mapper
+    - config:
+        jsonType.label: String
+        name: realm
+        multivalued: 'false'
+        userinfo.token.claim: 'true'
+        aggregate.attrs: 'false'
+        id.token.claim: 'true'
+        access.tokenResponse.claim: 'false'
+        user.attribute: realm
+        claim.name: realm
+        claim.value: id-gov-ua
+        access.token.claim: 'true'
+      name: realm
+      protocol: openid-connect
+      protocolMapper: oidc-hardcoded-claim-mapper
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmIdentityProvider
+metadata:
+  name: citizen-id-gov-ua
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ .Values.appLabel }}
+spec:
+  realm: citizen-portal
+  alias: idgovua
+  authenticateByDefault: true
+  enabled: true
+  firstBrokerLoginFlowAlias: "id-gov-ua"
+  providerId: "keycloak-oidc"
+  config:
+    clientId: {{ .Release.Namespace }}-citizen-portal
+    backchannelSupported: "true"
+    clientSecret: {{ $secretValue | b64dec }}
+    clientAuthMethod: "client_secret_post"
+    authorizationUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/auth
+    userInfoUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/userinfo
+    tokenUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/token
+    logoutUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/logout
+    issuer: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua
+  mappers:
+    - identityProviderMapper: "oidc-user-attribute-idp-mapper"
+      name: "drfo"
+      config:
+        claim: "drfo"
+        "user.attribute": "drfo"
+        syncMode: "INHERIT"
+    - identityProviderMapper: "oidc-user-attribute-idp-mapper"
+      name: "edrpou"
+      config:
+        claim: "edrpou"
+        "user.attribute": "edrpou"
+        syncMode: "INHERIT"
+    - identityProviderMapper: "oidc-user-attribute-idp-mapper"
+      name: "fullName"
+      config:
+        claim: "fullName"
+        "user.attribute": "fullName"
+        syncMode: "INHERIT"
+    - identityProviderMapper: "oidc-user-attribute-idp-mapper"
+      name: "realm"
+      config:
+        claim: "realm"
+        "user.attribute": "oidc-realm"
+        syncMode: "INHERIT"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Namespace }}-registry-jenkins-role
+  namespace: user-management
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - '*'
+    resources:
+      - secrets
+    resourceNames:
+      - keycloak-client.{{ .Release.Namespace }}-citizen-portal.secret
+  - verbs:
+      - '*'
+    apiGroups:
+      - '*'
+    resources:
+      - keycloakclients
+    resourceNames:
+      - {{ .Release.Namespace }}-citizen-portal
+  - verbs:
+      - create
+    apiGroups:
+      - v1.edp.epam.com
+    resources:
+      - keycloakclients
+  - verbs:
+      - '*'
+    apiGroups:
+      - '*'
+    resources:
+      - roles
+      - rolebindings
+    resourceNames:
+      - {{ .Release.Namespace }}-registry-jenkins-role
+      - {{ .Release.Namespace }}-registry-jenkins-rolebinding
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Namespace }}-registry-jenkins-rolebinding
+  namespace: user-management
+subjects:
+  - kind: ServiceAccount
+    name: jenkins
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Namespace }}-registry-jenkins-role

@@ -1,0 +1,49 @@
+{{- if .Values.global.notifications.email }}
+  {{- $smtpServerNamespace := "smtp-server" }}
+  {{- $smtpServerDomain := include "smtp-domain" (dict "smtpServerNamespace" $smtpServerNamespace) }}
+  {{- $username := .Release.Namespace }}
+  {{- $password := "" }}
+  {{- $jobName := "" }}
+  {{- $userManagementCommand := "" }}
+  {{- if eq .Values.global.notifications.email.type "internal" }}
+    {{- $secretName := "smtp-internal-credentials" }}
+    {{- $password = include "smtp-internal-password" (dict "secretName" $secretName "namespace" .Release.Namespace) }}
+    {{- $jobName = (printf "create-user-%s" $username) }}
+    {{- $userManagementCommand = (printf "flask mailu user %s %s %s" $username $smtpServerDomain ($password | b64dec)) }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  username: {{ (printf "%s@%s" $username $smtpServerDomain) | b64enc }}
+  password: {{ $password }}
+  {{- else }}
+    {{- $jobName = (printf "delete-user-%s" $username) }}
+    {{- $userManagementCommand = (printf "flask mailu user-delete %s@%s" $username $smtpServerDomain) }}
+  {{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ $smtpServerNamespace }}
+  name: {{ $jobName }}
+  labels:
+    relatedNamespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      name: {{ $jobName }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: mailu
+      containers:
+        - name: {{ $jobName }}
+          image: 'quay.io/openshift/origin-cli:latest'
+          command: ["/bin/sh"]
+          args:
+            - '-c'
+            - oc -n {{ $smtpServerNamespace }} exec $(oc -n {{ $smtpServerNamespace }} get pods -l component=admin --no-headers -o custom-columns=NAME:metadata.name) {{ $userManagementCommand }}
+{{- end }}

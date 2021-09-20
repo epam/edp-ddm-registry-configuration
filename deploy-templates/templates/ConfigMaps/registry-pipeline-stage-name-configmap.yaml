@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-pipeline-stage-name
+data:
+  cdPipelineName: {{ .Values.cdPipelineName }}
+  cdPipelineStageName: {{ .Values.cdPipelineStageName }}
+  gerritCentralUrl: {{ .Values.gerritCentralUrl }}
+  edpProject: {{ .Values.edpProject }}
+  signWidgetUrl: {{ .Values.envVariables.signWidgetUrl }}
+  digitalSignatureOpsUrl: {{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner

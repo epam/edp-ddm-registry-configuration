@@ -1,0 +1,32 @@
+{{- $root := .Values }}
+{{- range $authFlow := .Values.keycloak.authFlows }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakAuthFlow
+metadata:
+  name: {{ $authFlow.name }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  alias: {{ $authFlow.alias }}
+  authenticationExecutions:
+  {{- range $authenticator := $authFlow.authenticators }}
+    - authenticator: {{ $authenticator.name }}
+      requirement: {{ $authenticator.requirement }}
+      priority: {{ $authenticator.priority }}
+      {{- if $authenticator.authenticatorConfig }}
+      authenticatorConfig:
+        alias: {{ $authenticator.name }}-configuration
+        config:
+          {{- range $key,$value :=  $authenticator.authenticatorConfig }}
+            {{ $key }}: {{ tpl $value $ | squote }}
+          {{- end }}
+      {{- end }}
+  {{- end }}
+  builtIn: {{ $authFlow.builtIn }}
+  providerId: {{ $authFlow.providerId }}
+  realm: {{ $authFlow.realm }}
+  topLevel: {{ $authFlow.topLevel }}
+{{- end -}}

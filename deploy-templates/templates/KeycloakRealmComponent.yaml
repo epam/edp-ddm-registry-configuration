@@ -1,0 +1,24 @@
+{{- $release := .Release }}
+{{- range $realm := .Values.keycloak.realms }}
+{{- with $realm }}
+{{- if .providerEnabled }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmComponent
+metadata:
+  name: {{ $realm.name }}-user-storage
+spec:
+  realm: {{ $realm.name }}
+  name: {{ $realm.providerName }}
+  providerId: {{ $realm.providerId }}
+  providerType: {{ $realm.providerType}}
+  config:
+    enabled: {{ $realm.providerEnabled }}
+    priority: {{ $realm.providerPriority }}
+    vault-host: {{ $realm.providerVaultHost }}
+    vault-role: {{ $realm.providerVaultRole }}
+    vault-token-file: {{ $realm.providerVaultTokenFile }}
+    cachePolicy: {{ $realm.providerCachePolicy }}
+  {{- end }}
+  {{- end }}
+  {{- end }}

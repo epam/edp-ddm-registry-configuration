@@ -1,0 +1,15 @@
+{{- if .Values.global.registryAdministrators }}
+{{- range $administratorKey, $administratorValue := .Values.global.registryAdministrators }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmUser
+metadata:
+  name: {{ .Release.Namespace }}-administrator-{{ $administratorKey }}
+  namespace: user-management
+  labels:
+    relatedNamespace: {{ .Release.Namespace }}
+spec:
+  realm: openshift
+  {{- $administratorValue | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}

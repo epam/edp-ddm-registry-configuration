@@ -1,0 +1,17 @@
+{{- $root := .Values }}
+{{- range $realmKey, $realmValue := $root.keycloak.realms }}
+{{- if $realmValue.realmUsers }}
+{{- range $userKey, $userValue := $realmValue.realmUsers }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmUser
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: {{ $realmValue.name }}-{{ $userKey }}
+spec:
+  realm: {{ $realmValue.name }}
+  {{- $userValue | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}

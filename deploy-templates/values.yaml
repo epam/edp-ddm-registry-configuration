@@ -1,0 +1,839 @@
+global:
+  notifications:
+    email:
+      type: internal
+
+registryGroup:
+  name: "openshift"
+
+keycloak:
+  clients:
+    adminPortal:
+      name: admin-portal
+      clientId: admin-portal
+      public: true
+      targetRealm:
+        name: admin
+      clientRoles:
+        - form-administrator
+      webUrl: "https://admin-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      protocolMappers:
+        - config:
+            jsonType.label: String
+            name: drfo
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: drfo
+            claim.name: drfo
+            access.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: fullName
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: fullName
+            claim.name: fullName
+            access.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: edrpou
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: edrpou
+            claim.name: edrpou
+            access.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+
+    bpmsRealmAdminCitizenPortal:
+      name: bpms-realm-admin-citizen-portal
+      clientId: realm-admin
+      public: false
+      secretName: keycloak-realm-admin-citizen-client-secret
+      targetRealm:
+        name: citizen-portal
+      serviceAccountClientRoles:
+      - clientId: realm-management
+        roles:
+          - manage-clients
+          - manage-events
+          - create-client
+          - manage-authorization
+          - manage-identity-providers
+          - manage-realm
+          - manage-users
+          - query-clients
+          - query-groups
+          - query-realms
+          - query-users
+          - view-authorization
+          - view-clients
+          - view-events
+          - view-identity-providers
+          - view-realm
+          - view-users
+      webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+
+    bpmsRealmAdminOfficerPortal:
+      name: bpms-realm-admin-officer-portal
+      clientId: realm-admin
+      public: false
+      secretName: keycloak-realm-admin-officer-client-secret
+      targetRealm:
+        name: officer-portal
+      serviceAccountClientRoles:
+      - clientId: realm-management
+        roles:
+          - manage-clients
+          - manage-events
+          - create-client
+          - manage-authorization
+          - manage-identity-providers
+          - manage-realm
+          - manage-users
+          - query-clients
+          - query-groups
+          - query-realms
+          - query-users
+          - view-authorization
+          - view-clients
+          - view-events
+          - view-identity-providers
+          - view-realm
+          - view-users
+      webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+
+    importUsersClientOfficerPortal:
+      name: import-users-job
+      clientId: import-users-job
+      public: false
+      protocol: openid-connect
+      secretName: keycloak-realm-officer-import-users-client-secret
+      targetRealm:
+        name: officer-portal
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - manage-realm
+            - view-clients
+            - view-users
+      directAccess: false
+      audRequired: false
+
+    citizenPortal:
+      name: citizen-portal
+      clientId: citizen-portal
+      public: true
+      targetRealm:
+        name: citizen-portal
+      clientRoles:
+        - administrator
+        - citizen
+      webUrl: "https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      protocolMappers:
+        - config:
+            jsonType.label: String
+            name: drfo
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: drfo
+            claim.name: drfo
+            access.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: fullName
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: fullName
+            claim.name: fullName
+            access.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: edrpou
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: edrpou
+            claim.name: edrpou
+            access.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: roles
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+          name: realm roles
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-realm-role-mapper
+        - config:
+            jsonType.label: String
+            name: rnokpp
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: rnokpp
+            claim.name: rnokpp
+            access.token.claim: 'true'
+          name: rnokpp
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: subjectType
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: subjectType
+            claim.name: subjectType
+            access.token.claim: 'true'
+          name: subjectType
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: boolean
+            name: representative
+            multivalued: 'false'
+            userinfo.token.claim: 'false'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: representative
+            claim.name: representative
+            access.token.claim: 'true'
+          name: representative
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+
+    bpmsSystemUserCitizenPortal:
+      name: bpms-system-user-citizen-portal
+      clientId: system-user
+      public: false
+      secretName: keycloak-system-user-citizen-client-secret
+      targetRealm:
+        name: citizen-portal
+      webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      protocolMappers:
+        - config:
+            jsonType.label: String
+            name: drfo
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: drfo
+            claim.name: drfo
+            access.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: fullName
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: fullName
+            claim.name: fullName
+            access.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+
+    camundaCockpitAdminPortal:
+      name: camunda-cockpit-admin
+      clientId: camunda-cockpit
+      public: false
+      secretName: keycloak-client-camunda-cockpit-admin-secret
+      targetRealm:
+        name: admin
+      webUrl: "https://business-proc-admin-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - query-groups
+            - query-users
+            - view-users
+
+    camundaCockpitOfficerPortal:
+      name: camunda-cockpit-officer-portal
+      clientId: camunda-cockpit
+      public: false
+      secretName: keycloak-client-camunda-cockpit-officer-portal-secret
+      targetRealm:
+        name: officer-portal
+      webUrl: "https://business-proc-admin-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - query-groups
+            - query-users
+            - view-users
+
+    jenkinsDeployer:
+      name: jenkins-deployer
+      clientId: jenkins-deployer
+      public: false
+      secretName: jenkins-keycloak-client
+      targetRealm:
+        name: admin
+      webUrl: "https://jenkins-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      realmRoles:
+        - camunda-admin
+
+    officerPortal:
+      name: officer-portal
+      clientId: officer-portal
+      public: true
+      targetRealm:
+        name: officer-portal
+      webUrl: "https://officer-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+      clientRoles:
+        - administrator
+      protocolMappers:
+        - config:
+            jsonType.label: String
+            name: drfo
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: drfo
+            claim.name: drfo
+            access.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: fullName
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: fullName
+            claim.name: fullName
+            access.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: edrpou
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: edrpou
+            claim.name: edrpou
+            access.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: roles
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+          name: realm roles
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-realm-role-mapper
+        - config:
+            jsonType.label: String
+            name: rnokpp
+            multivalued: 'false'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: rnokpp
+            claim.name: rnokpp
+            access.token.claim: 'true'
+          name: rnokpp
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+
+    redashAdmin:
+      name: redash-admin
+      clientId: redash-admin
+      public: true
+      targetRealm:
+        name: admin
+      webUrl: "https://redash-admin-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      directAccess: true
+      audRequired: true
+      attributes:
+        saml.assertion.signature: 'true'
+        saml.client.signature: 'false'
+      protocol: saml
+      frontChannelLogout: false
+      protocolMappers:
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "edrpou"
+            friendly.name: "edrpou"
+            user.attribute: "edrpou"
+          name: "edrpou"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "drfo"
+            friendly.name: "drfo"
+            user.attribute: "drfo"
+          name: "drfo"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "fullName"
+            friendly.name: "fullName"
+            user.attribute: "fullName"
+          name: "fullName"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+
+    redashViewer:
+      name: redash-viewer
+      clientId: redash-viewer
+      public: true
+      targetRealm:
+        name: officer-portal
+      webUrl: "https://redash-viewer-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      directAccess: true
+      audRequired: false
+      attributes:
+        saml.assertion.signature: 'true'
+        saml.client.signature: 'false'
+      protocol: saml
+      frontChannelLogout: false
+      protocolMappers:
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "edrpou"
+            friendly.name: "edrpou"
+            user.attribute: "edrpou"
+          name: "edrpou"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "drfo"
+            friendly.name: "drfo"
+            user.attribute: "drfo"
+          name: "drfo"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "fullName"
+            friendly.name: "fullName"
+            user.attribute: "fullName"
+          name: "fullName"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
+
+    trembitaInvoker:
+      name: trembita-invoker
+      clientId: trembita-invoker
+      public: false
+      secretName: keycloak-trembita-invoker-client-secret
+      targetRealm:
+        name: external-system
+      directAccess: false
+      audRequired: false
+      realmRoles:
+        - trembita-invoker
+      protocolMappers:
+        - config:
+            access.token.claim: 'true'
+            aggregate.attrs: 'false'
+            claim.name: drfo
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'false'
+            name: drfo
+            user.attribute: drfo
+            userinfo.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            access.token.claim: 'true'
+            aggregate.attrs: 'false'
+            claim.name: edrpou
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'false'
+            name: edrpou
+            user.attribute: edrpou
+            userinfo.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            access.token.claim: 'true'
+            aggregate.attrs: 'false'
+            claim.name: fullName
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'false'
+            name: fullName
+            user.attribute: fullName
+            userinfo.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+      serviceAccountAttributes:
+        drfo: '0'
+        edrpou: '0'
+        fullName: Сервісний користувач Трембіти
+
+    trembitaUser:
+      name: trembita-user
+      clientId: trembita-user
+      public: false
+      secretName: keycloak-trembita-user-client-secret
+      targetRealm:
+        name: external-system
+      directAccess: false
+      audRequired: false
+      protocolMappers:
+        - config:
+            access.token.claim: 'true'
+            claim.name: drfo
+            claim.value: '0'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: drfo
+            userinfo.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: edrpou
+            claim.value: '0'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: edrpou
+            userinfo.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: fullName
+            claim.value: Сервісний користувач Трембіти
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: fullName
+            userinfo.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+
+  clientScopes:
+    redashAdmin:
+      name: redash-admin-role-list
+      scopeName: role_list
+      description: "Redash role list"
+      default: true
+      realm: admin
+      protocol: saml
+      protocolMappers:
+        - name: "role list"
+          protocol: saml
+          protocolMapper: "saml-role-list-mapper"
+          config:
+            "friendly.name": "RedashGroups"
+            "attribute.name": "Role"
+            "attribute.nameformat": "Basic"
+            "single": "false"
+    redashViewer:
+      name: redash-viewer-role-list
+      scopeName: role_list
+      description: "Redash role list"
+      default: true
+      realm: officer-portal
+      protocol: saml
+      protocolMappers:
+        - name: "role list"
+          protocol: saml
+          protocolMapper: "saml-role-list-mapper"
+          config:
+            "friendly.name": "RedashGroups"
+            "attribute.name": "Role"
+            "attribute.nameformat": "Basic"
+            "single": "false"
+
+  realms:
+    adminPortal:
+      name: admin
+      keycloakOwner: main
+      providerName: "ddm-user-storage-provider"
+      providerId: "ddm-user-storage-provider"
+      providerType: "org.keycloak.storage.UserStorageProvider"
+      providerEnabled: "[\"false\"]"
+      providerPriority: "[\"0\"]"
+      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
+      providerVaultRole: "[\"sa-role\"]"
+      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
+      providerCachePolicy: "[\"DEFAULT\"]"
+      ssoRealm:
+        enabled: true
+        autoRedirectEnabled: false
+        name: '{{- template "keycloak.registryGroup.name" . -}}'
+
+    citizenPortal:
+      name: citizen-portal
+      keycloakOwner: main
+      browserFlow: dso-citizen-auth-flow
+      loginTheme: dso-citizen-login-theme
+      providerName: "ddm-user-storage-provider"
+      providerId: "ddm-user-storage-provider"
+      providerType: "org.keycloak.storage.UserStorageProvider"
+      providerEnabled: "[\"false\"]"
+      providerPriority: "[\"0\"]"
+      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
+      providerVaultRole: "[\"sa-role\"]"
+      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
+      providerCachePolicy: "[\"DEFAULT\"]"
+      ssoRealm:
+        enabled: false
+
+    externalSystem:
+      name: external-system
+      keycloakOwner: main
+      ssoRealm:
+        enabled: true
+        autoRedirectEnabled: false
+        name: '{{- template "keycloak.registryGroup.name" . -}}'
+
+    officerPortal:
+      name: officer-portal
+      keycloakOwner: main
+      browserFlow: dso-officer-auth-flow
+      loginTheme: dso-officer-login-theme
+      providerName: "ddm-user-storage-provider"
+      providerId: "ddm-user-storage-provider"
+      providerType: "org.keycloak.storage.UserStorageProvider"
+      providerEnabled: "[\"false\"]"
+      providerPriority: "[\"0\"]"
+      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
+      providerVaultRole: "[\"sa-role\"]"
+      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
+      providerCachePolicy: "[\"DEFAULT\"]"
+      ssoRealm:
+        enabled: true
+        autoRedirectEnabled: false
+        name: '{{- template "keycloak.registryGroup.name" . -}}'
+
+  authFlows:
+    citizenIdGovUaAuthFlow:
+      name: id-gov-ua
+      realm: citizen-portal
+      alias: id-gov-ua
+      builtIn: false
+      providerId: basic-flow
+      topLevel: true
+      authenticators:
+        reviewConfigAuthenticator:
+          name: idp-review-profile
+          requirement: REQUIRED
+          priority: 1
+          authenticatorConfig:
+            update.profile.on.first.login: "off"
+        citizenRolesAuthenticator:
+          name: id-gov-ua-authenticator
+          requirement: REQUIRED
+          priority: 2
+          authenticatorConfig:
+            citizenDefaultRoles: "citizen;unregistered-individual;"
+
+    officerAuthFlow:
+      name: officer-portal-dso-officer-auth-flow
+      realm: officer-portal
+      alias: dso-officer-auth-flow
+      builtIn: false
+      providerId: basic-flow
+      topLevel: true
+      authenticators:
+        dsOfficerAuthenticator:
+          name: ds-officer-authenticator
+          requirement: ALTERNATIVE
+          priority: 1
+          authenticatorConfig:
+            dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
+            widgetUrl: '{{ .Values.envVariables.signWidgetUrl }}'
+            startPageUrl: '{{ template "officer-portal.url" . }}/officer/login'
+            themeFile: white-theme.js
+        authcookie:
+          name: auth-cookie
+          requirement: ALTERNATIVE
+          priority: 0
+
+  realmGroups:
+    camundaAdmin:
+      name: camunda-admin
+      realm: admin
+
+    officer:
+      name: officer
+      realm: officer-portal
+
+  realmRoles:
+    auditor:
+      name: auditor
+      realm: officer-portal
+      composite: false
+
+    camundaAdmin:
+      name: camunda-admin
+      realm: admin
+      composite: false
+
+    officer:
+      name: officer
+      realm: officer-portal
+      composite: false
+
+    trembitaInvoker:
+      name: trembita-invoker
+      realm: external-system
+      composite: false
+
+    redashAdmin:
+      name: redash-admin
+      realm: admin
+      composite: false
+
+  realmRoleBatches:
+    citizenSystemRoles:
+      name: citizen-system-roles
+      realm: citizen-portal
+      role:
+        batch:
+          name: citizen-system-roles
+          list:
+            - citizen
+            - unregistered-individual
+            - unregistered-entrepreneur
+            - unregistered-legal
+            - individual
+            - entrepreneur
+            - legal
+
+caIsolation: false
+
+envVariables:
+  signWidgetUrl: "https://eu.iit.com.ua/sign-widget/v20200922/"
+  digitalSignatureOpsUrl: "http://digital-signature-ops:8080"
+
+ceph:
+  objectBucketClaims:
+    datafactoryCephBucket:
+      name: datafactory-ceph-bucket
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    excerptSignatureBucket:
+      name: excerpt-signature-bucket
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    fileCephBucket:
+      name: file-ceph-bucket
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    fileExcerptBucket:
+      name: file-excerpt-bucket
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    excerptTemplatesBucket:
+      name: excerpt-templates
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+      ssl: false
+    lowcodeFileStorage:
+      name: lowcode-file-storage
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    lowcodeFormDataStorage:
+      name: lowcode-form-data-storage
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    responseCephBucket:
+      name: response-ceph-bucket
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    userImportCephBucket:
+      name: user-import
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+    userImportArchiveCephBucket:
+      name: user-import-archive
+      bucketclass: registry-bucket-class
+      storageClassName: registry-bucket
+
+trembitaConfigValues:
+  trembitaUserId: MOCK
+  trembitaUrl: 'https://trembita-edr-registry-mock.apps.cicd2.mdtu-ddm.projects.epam.com/mockEDRService'
+  trembitaProtocolVersion: '4.0'
+  clientXRoadInstance: MOCK
+  clientMemberClass: MOCK
+  clientMemberCode: '123456'
+  clientSubsystemCode: '123456'
+  registryToken: MOCK
+  registryXRoadInstance: MOCK
+  registryMemberClass: MOCK
+  registryMemberCode: '123456'
+  registrySubsystemCode: '123456'
+
+appLabel: registry-configuration
