@@ -165,7 +165,7 @@ keycloak:
       clientRoles:
         - administrator
         - citizen
-      webUrl: "https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "citizen-portal.url" . }}'
       directAccess: false
       audRequired: false
       protocolMappers:
@@ -349,7 +349,7 @@ keycloak:
       public: true
       targetRealm:
         name: officer-portal
-      webUrl: "https://officer-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "officer-portal.url" . }}'
       directAccess: false
       audRequired: false
       clientRoles:
@@ -880,6 +880,8 @@ trembitaConfigValues:
 appLabel: registry-configuration
 
 portals:
+  citizen:
+    customDns: {}
   officer:
     customDns: {}
-      #host: example.com
+

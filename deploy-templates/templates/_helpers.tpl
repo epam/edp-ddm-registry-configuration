@@ -6,11 +6,11 @@
 {{- end -}}
 
 {{- define "officer-portal.url" -}}
-{{- printf "%s%s-%s-%s.%s" "https://" (.Values.portals.officer.customDns.host | default "officer-portal") .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard }}
+{{- printf "%s%s" "https://" (.Values.portals.officer.customDns.host | default ( printf "%s-%s-%s.%s" "officer-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard )) }}
 {{- end }}
 
 {{- define "citizen-portal.url" -}}
-{{- printf "%s%s-%s-%s.%s" "https://" "citizen-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard }}
+{{- printf "%s%s" "https://" (.Values.portals.citizen.customDns.host | default ( printf "%s-%s-%s.%s" "citizen-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard )) }}
 {{- end }}
 
 {{- define "webUrl" -}}
