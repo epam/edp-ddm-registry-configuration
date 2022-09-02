@@ -400,6 +400,19 @@ keycloak:
           name: rnokpp
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            name: KATOTTG
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+            aggregate.attrs: 'false'
+            id.token.claim: 'true'
+            user.attribute: KATOTTG
+            claim.name: KATOTTG
+            access.token.claim: 'true'
+          name: KATOTTG
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
 
     redashAdmin:
       name: redash-admin
