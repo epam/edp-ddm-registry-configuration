@@ -607,8 +607,7 @@ keycloak:
           protocol: saml
           protocolMapper: "saml-role-list-mapper"
           config:
-            "friendly.name": "RedashGroups"
-            "attribute.name": "Role"
+            "attribute.name": "RedashGroups"
             "attribute.nameformat": "Basic"
             "single": "false"
     redashViewer:
@@ -623,8 +622,7 @@ keycloak:
           protocol: saml
           protocolMapper: "saml-role-list-mapper"
           config:
-            "friendly.name": "RedashGroups"
-            "attribute.name": "Role"
+            "attribute.name": "RedashGroups"
             "attribute.nameformat": "Basic"
             "single": "false"
 
