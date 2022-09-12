@@ -139,6 +139,23 @@ keycloak:
       directAccess: false
       audRequired: false
 
+    userAttributesManagementClientOfficerPortal:
+      name: user-attributes-management
+      clientId: user-attributes-management
+      public: false
+      protocol: openid-connect
+      secretName: keycloak-realm-officer-user-attributes-management-client-secret
+      targetRealm:
+        name: officer-portal
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - manage-realm
+            - view-users
+            - manage-users
+      directAccess: false
+      audRequired: false
+
     citizenPortal:
       name: citizen-portal
       clientId: citizen-portal
