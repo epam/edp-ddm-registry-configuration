@@ -28,9 +28,7 @@ spec:
   {{- if $realm.loginTheme }}
   browserSecurityHeaders:
     {{- if not $root.caIsolation }}
-    contentSecurityPolicy: "frame-src 'self' https://eu.iit.com.ua; frame-ancestors 'self'; object-src 'none';"
-    {{- else }}
-    contentSecurityPolicy: "frame-src 'self' {{ $root.envVariables.signWidgetUrl }}; frame-ancestors 'self'; object-src 'none';"
+    contentSecurityPolicy: "frame-src 'self' https://{{ (urlParse .Values.signWidget.url).host }}; frame-ancestors 'self'; object-src 'none';"
     {{- end }}
   {{- end }}
   {{- if $realm.browserFlow }}

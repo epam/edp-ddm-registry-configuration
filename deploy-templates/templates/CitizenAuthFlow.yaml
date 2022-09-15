@@ -21,7 +21,7 @@ spec:
         alias: ds-citizen-authenticator-configuration
         config:
           citizenDefaultRoles: citizen;unregistered-individual;
-          widgetUrl: '{{ .Values.envVariables.signWidgetUrl }}'
+          widgetUrl: '{{ .Values.signWidget.url }}'
           dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
           entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
           themeFile: white-theme.js

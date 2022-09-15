@@ -713,7 +713,7 @@ keycloak:
           priority: 1
           authenticatorConfig:
             dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
-            widgetUrl: '{{ .Values.envVariables.signWidgetUrl }}'
+            widgetUrl: '{{ .Values.signWidget.url }}'
             startPageUrl: '{{ template "officer-portal.url" . }}/officer/login'
             themeFile: white-theme.js
         authcookie:
@@ -775,8 +775,10 @@ keycloak:
 caIsolation: false
 
 envVariables:
-  signWidgetUrl: "https://eu.iit.com.ua/sign-widget/v20200922/"
   digitalSignatureOpsUrl: "http://digital-signature-ops:8080"
+
+signWidget:
+  url: https://eu.iit.com.ua/sign-widget/v20200922/
 
 ceph:
   objectBucketClaims:
@@ -837,3 +839,8 @@ trembitaConfigValues:
   registrySubsystemCode: '123456'
 
 appLabel: registry-configuration
+
+portals:
+  officer:
+    customDns: {}
+      #host: example.com

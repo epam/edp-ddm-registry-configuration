@@ -6,7 +6,7 @@
 {{- end -}}
 
 {{- define "officer-portal.url" -}}
-{{- printf "%s%s-%s-%s.%s" "https://" "officer-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard }}
+{{- printf "%s%s-%s-%s.%s" "https://" (.Values.portals.officer.customDns.host | default "officer-portal") .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard }}
 {{- end }}
 
 {{- define "citizen-portal.url" -}}

@@ -7,5 +7,5 @@ data:
   cdPipelineStageName: {{ .Values.cdPipelineStageName }}
   gerritCentralUrl: {{ .Values.gerritCentralUrl }}
   edpProject: {{ .Values.edpProject }}
-  signWidgetUrl: {{ .Values.envVariables.signWidgetUrl }}
+  signWidgetUrl: {{ .Values.signWidget.url }}
   digitalSignatureOpsUrl: {{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner
