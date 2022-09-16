@@ -27,9 +27,7 @@ spec:
   {{- end }}
   {{- if $realm.loginTheme }}
   browserSecurityHeaders:
-    {{- if not $root.caIsolation }}
     contentSecurityPolicy: "frame-src 'self' https://{{ (urlParse .Values.signWidget.url).host }}; frame-ancestors 'self'; object-src 'none';"
-    {{- end }}
   {{- end }}
   {{- if $realm.browserFlow }}
   browserFlow: {{ $realm.browserFlow }}
