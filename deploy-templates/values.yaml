@@ -754,6 +754,11 @@ keycloak:
       realm: admin
       composite: false
 
+    user-management:
+      name: user-management
+      realm: admin
+      composite: false
+
     officer:
       name: officer
       realm: officer-portal
