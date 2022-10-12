@@ -725,12 +725,18 @@ keycloak:
           authenticatorConfig:
             dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
             widgetUrl: '{{ .Values.signWidget.url }}'
+            widgetHeight: '400'
             startPageUrl: '{{ template "officer-portal.url" . }}/officer/login'
             themeFile: white-theme.js
+            title: ''
+            titleFull: ''
         authcookie:
           name: auth-cookie
           requirement: ALTERNATIVE
           priority: 0
+
+  citizenAuthFlow:
+    widgetHeight: '400'
 
   realmGroups:
     camundaAdmin:

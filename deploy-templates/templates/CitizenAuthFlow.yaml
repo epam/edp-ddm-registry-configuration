@@ -23,8 +23,11 @@ spec:
           citizenDefaultRoles: citizen;unregistered-individual;
           widgetUrl: '{{ .Values.signWidget.url }}'
           dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
+          widgetHeight: '{{ .Values.keycloak.citizenAuthFlow.widgetHeight }}'
           entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
           themeFile: white-theme.js
+          title: ''
+          titleFull: ''
           esignHintUrl: https://diia.gov.ua/faq/1
           legalDefaultRoles: citizen;unregistered-legal;
           startPageUrl: >-
