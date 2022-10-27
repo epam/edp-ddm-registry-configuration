@@ -6,7 +6,8 @@ void call() {
             "-n $NAMESPACE | base64 --decode", returnStdout: true)
     String gerritPass = sh(script: "oc get secret $gerritSecretName -o jsonpath={.data.password} " +
             "-n $NAMESPACE | base64 --decode", returnStdout: true)
-    String gerritHost = "gerrit.${NAMESPACE}.svc.cluster.local:8080"
+    String gerritPath = sh(script: "oc get route gerrit -o jsonpath={.spec.path} -n $NAMESPACE", returnStdout: true).replaceAll("/\\z", "")
+    String gerritHost = "gerrit.${NAMESPACE}.svc.cluster.local:8080$gerritPath"
     String repoUrl = "http://$gerritUser:$gerritPass@$gerritHost/$registryRepoName"
     String isRepoExists = sh(script: "set +x; git ls-remote $repoUrl | grep master > /dev/null", returnStatus: true)
     if (isRepoExists == '0') {

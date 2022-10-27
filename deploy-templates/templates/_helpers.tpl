@@ -58,6 +58,22 @@
 {{- printf "external-service-api-%s" (include "edp.hostnameSuffix" .) }}
 {{- end }}
 
+{{- define "admin-tools.hostname" -}}
+{{- printf "admin-tools-%s" (include "edp.hostnameSuffix" .) }}
+{{- end }}
+
 {{- define "edp.hostnameSuffix" -}}
 {{- printf "%s.%s" .Values.stageName .Values.dnsWildcard }}
 {{- end }}
+
+{{- define "admin-routes.whitelist.cidr" -}}
+{{- if .Values.global }}
+{{- if .Values.global.whiteListIP }}
+{{- .Values.global.whiteListIP.adminRoutes }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "admin-routes.whitelist.annotation" -}}
+haproxy.router.openshift.io/ip_whitelist: {{ (include "admin-routes.whitelist.cidr" . | default "0.0.0.0/0") | quote }}
+{{- end -}}
