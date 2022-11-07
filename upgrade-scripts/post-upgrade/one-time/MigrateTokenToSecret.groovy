@@ -8,7 +8,7 @@ void call() {
             "-n $NAMESPACE | base64 --decode", returnStdout: true)
     String gerritHost = "gerrit.${NAMESPACE}.svc.cluster.local:8080"
     String repoUrl = "http://$gerritUser:$gerritPass@$gerritHost/$registryRepoName"
-    String isRepoExists = sh(script: "set +x; git ls-remote $repoUrl > /dev/null", returnStatus: true)
+    String isRepoExists = sh(script: "set +x; git ls-remote $repoUrl | grep master > /dev/null", returnStatus: true)
     if (isRepoExists == '0') {
         sh(script: "set +x; git clone $repoUrl")
         def configFile = readYaml file: "$registryRepoName/bp-trembita/configuration.yml"
