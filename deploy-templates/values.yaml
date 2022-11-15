@@ -510,6 +510,14 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            aggregate.attrs: ""
+            attribute.name: "KATOTTG"
+            friendly.name: "KATOTTG"
+            user.attribute: "KATOTTG"
+          name: "KATOTTG"
+          protocol: "saml"
+          protocolMapper: "saml-user-attribute-mapper"
 
     trembitaInvoker:
       name: trembita-invoker
