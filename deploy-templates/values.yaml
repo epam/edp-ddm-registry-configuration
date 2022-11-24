@@ -750,7 +750,7 @@ keycloak:
           authenticatorConfig:
             dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
             widgetUrl: '{{ .Values.signWidget.url }}'
-            widgetHeight: '400'
+            widgetHeight: '720'
             startPageUrl: '{{ template "officer-portal.url" . }}/officer/login'
             themeFile: white-theme.js
             title: ''
