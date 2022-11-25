@@ -447,6 +447,14 @@ keycloak:
       frontChannelLogout: false
       protocolMappers:
         - config:
+            attribute.name: "sessionIdle"
+            friendly.name: "sessionIdle"
+            Script: "exports = Math.round(realm.getSsoSessionIdleTimeout() * 0.85);"
+            single: "true"
+          name: "sessionIdle"
+          protocol: "saml"
+          protocolMapper: "saml-javascript-mapper"
+        - config:
             aggregate.attrs: ""
             attribute.name: "edrpou"
             friendly.name: "edrpou"
@@ -486,6 +494,14 @@ keycloak:
       protocol: saml
       frontChannelLogout: false
       protocolMappers:
+        - config:
+            attribute.name: "sessionIdle"
+            friendly.name: "sessionIdle"
+            Script: "exports = Math.round(realm.getSsoSessionIdleTimeout() * 0.85);"
+            single: "true"
+          name: "sessionIdle"
+          protocol: "saml"
+          protocolMapper: "saml-javascript-mapper"
         - config:
             aggregate.attrs: ""
             attribute.name: "edrpou"
