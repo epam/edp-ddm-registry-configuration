@@ -443,6 +443,8 @@ keycloak:
       attributes:
         saml.assertion.signature: 'true'
         saml.client.signature: 'false'
+        saml_force_name_id_format: 'true'
+        saml_name_id_format: username
       protocol: saml
       frontChannelLogout: false
       protocolMappers:
@@ -491,6 +493,8 @@ keycloak:
       attributes:
         saml.assertion.signature: 'true'
         saml.client.signature: 'false'
+        saml_force_name_id_format: 'true'
+        saml_name_id_format: username
       protocol: saml
       frontChannelLogout: false
       protocolMappers:
