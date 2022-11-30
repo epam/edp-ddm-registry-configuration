@@ -295,6 +295,9 @@ keycloak:
           name: fullName
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+      serviceAccountAttributes:
+        drfo: '00000000'
+        fullName: Сервісний користувач system-user
 
     camundaCockpitAdminPortal:
       name: camunda-cockpit-admin
