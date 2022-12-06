@@ -434,6 +434,16 @@ keycloak:
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
 
+    redashAdminLogout:
+      name: redash-admin-logout
+      clientId: redash-admin-logout
+      public: true
+      targetRealm:
+        name: admin
+      webUrl: "https://redash-admin-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
+
     redashAdmin:
       name: redash-admin
       clientId: redash-admin
@@ -483,6 +493,16 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+
+    redashViewerLogout:
+      name: redash-viewer-logout
+      clientId: redash-viewer-logout
+      public: true
+      targetRealm:
+        name: officer-portal
+      webUrl: "https://redash-viewer-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      directAccess: false
+      audRequired: false
 
     redashViewer:
       name: redash-viewer
