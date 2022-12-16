@@ -258,13 +258,13 @@ keycloak:
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
 
-    bpmsSystemUserCitizenPortal:
-      name: bpms-system-user-citizen-portal
+    bpmsSystemUserAdmin:
+      name: bpms-system-user-admin
       clientId: system-user
       public: false
-      secretName: keycloak-system-user-citizen-client-secret
+      secretName: keycloak-system-user-admin-client-secret
       targetRealm:
-        name: citizen-portal
+        name: admin
       webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
       directAccess: false
       audRequired: false
