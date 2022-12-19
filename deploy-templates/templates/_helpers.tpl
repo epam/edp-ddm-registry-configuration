@@ -62,6 +62,10 @@
 {{- printf "admin-tools-%s" (include "edp.hostnameSuffix" .) }}
 {{- end }}
 
+{{- define "admin-tools.url" -}}
+{{- printf "%s%s" "https://" (include "admin-tools.hostname" .) }}
+{{- end }}
+
 {{- define "edp.hostnameSuffix" -}}
 {{- printf "%s.%s" .Values.stageName .Values.dnsWildcard }}
 {{- end }}

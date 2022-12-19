@@ -16,7 +16,7 @@ keycloak:
         name: admin
       clientRoles:
         - form-administrator
-      webUrl: "https://admin-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "admin-tools.url" . }}'
       directAccess: false
       audRequired: false
       protocolMappers:
@@ -935,4 +935,3 @@ portals:
     customDns: {}
   officer:
     customDns: {}
-
