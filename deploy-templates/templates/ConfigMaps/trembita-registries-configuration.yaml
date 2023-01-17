@@ -1,0 +1,35 @@
+{{- if .Values.trembita -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.registryConfigs.trembitaRegistriesConfigurationName }}
+data:
+  trembita-registries-configuration.yml: |
+    trembita:
+      registries:
+        {{- range $k,$v := .Values.trembita.registries }}
+        {{ $k }}:
+          {{- range $kIn,$vIn := $v }}
+        {{- if ne $kIn "type" }}
+            {{- if eq $kIn "auth" }}
+          {{ $kIn }}:
+            {{- range $kInIn,$vInIn := $vIn }}
+              {{- if ne $kInIn "secret" }}
+            {{ $kInIn }}: {{ $vInIn }}
+            {{- end -}}
+            {{- end -}}
+            {{- end -}}
+            {{- if or (eq $kIn "client") (eq $kIn "service") }}
+          {{ $kIn }}:
+            {{- range $kInInCS,$vInInCS := $vIn }}
+            {{ $kInInCS }}: {{ $vInInCS }}
+            {{- end -}}
+                {{- else }}
+            {{- if ne $kIn "auth" }}
+          {{ $kIn }}: {{ $vIn }}
+            {{- end -}}
+            {{- end -}}
+        {{- end -}}
+        {{- end -}}
+        {{- end -}}
+    {{- end -}}

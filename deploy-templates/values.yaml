@@ -914,20 +914,6 @@ ceph:
       bucketclass: registry-bucket-class
       storageClassName: registry-bucket
 
-trembitaConfigValues:
-  trembitaUserId: MOCK
-  trembitaUrl: 'https://trembita-edr-registry-mock.apps.cicd2.mdtu-ddm.projects.epam.com/mockEDRService'
-  trembitaProtocolVersion: '4.0'
-  clientXRoadInstance: MOCK
-  clientMemberClass: MOCK
-  clientMemberCode: '123456'
-  clientSubsystemCode: '123456'
-  registryToken: MOCK
-  registryXRoadInstance: MOCK
-  registryMemberClass: MOCK
-  registryMemberCode: '123456'
-  registrySubsystemCode: '123456'
-
 appLabel: registry-configuration
 
 portals:
@@ -935,3 +921,48 @@ portals:
     customDns: {}
   officer:
     customDns: {}
+
+trembitaMock:
+  registries:
+    edr-registry:
+      user-id: MOCK
+      protocol-version: "4.0"
+      url: 'https://trembita-edr-registry-mock.apps.cicd2.mdtu-ddm.projects.epam.com/mockEDRService'
+      client:
+        x-road-instance: MOCK
+        member-class: MOCK
+        member-code: '123456'
+        subsystem-code: '123456'
+      service:
+        x-road-instance: MOCK
+        member-class: MOCK
+        member-code: '123456'
+        subsystem-code: '123456'
+
+registryConfigs:
+  trembitaRegistriesConfigurationName: trembita-registries-configuration
+  diiaConfigurationName: diia-configuration
+  externalSystemsConfigurationName: external-systems-configuration
+  externalSystemsEndpointConfigurationName: external-systems-endpoint-configuration
+externalSecrets:
+  trembitaRegistriesSecrets:
+    name: trembita-registries-external-secrets
+    secretStoreRef:
+      name: central-vault-secret-store
+    refreshInterval: "10s"
+    target:
+      name: trembita-registries-secrets
+  externalSystemsExternalSecrets:
+    name: external-systems-external-secrets
+    secretStoreRef:
+      name: central-vault-secret-store
+    refreshInterval: "10s"
+    target:
+      name: external-systems-secrets
+  diiaExternalSecret:
+    name: diia-external-secret
+    secretStoreRef:
+      name: central-vault-secret-store
+    refreshInterval: "10s"
+    target:
+      name: diia-secret

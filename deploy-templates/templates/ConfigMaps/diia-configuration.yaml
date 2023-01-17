@@ -1,0 +1,27 @@
+{{- if (index .Values "external-systems").diia -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.registryConfigs.diiaConfigurationName }}
+data:
+  diia-configuration.yml: |
+    external-systems:
+      diia:
+    {{- range $k,$v := (index .Values "external-systems").diia }}
+    {{- if ne $k "type" }}
+        {{- if eq $k "auth" }}
+        {{ $k }}:
+        {{- range $kIn,$vIn := $v }}
+        {{- if ne $kIn "secret" }}
+          {{ $kIn }}: {{ $vIn }}
+        {{- end -}}
+        {{- end -}}
+        {{- else }}
+        {{ $k }}: {{ $v }}
+        {{- end -}}
+    {{- end -}}
+    {{- end -}}
+    {{- if not (index .Values "external-systems").diia.url }}
+        {{ "url" }}: {{ "api2t.diia.gov.ua" }}
+    {{- end -}}
+{{- end -}}

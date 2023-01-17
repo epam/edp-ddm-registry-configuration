@@ -1,0 +1,13 @@
+{{- $configMap := (lookup "v1" "ConfigMap" .Release.Namespace .Values.registryConfigs.externalSystemsEndpointConfigurationName) }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.registryConfigs.externalSystemsEndpointConfigurationName }}
+{{- if $configMap }}
+data:
+{{ $configMap.data | toYaml | nindent 2 }}
+{{- else }}
+data:
+  external-systems-endpoint-configuration.yml: |
+    external-systems: {}
+{{- end -}}

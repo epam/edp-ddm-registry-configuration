@@ -1,0 +1,28 @@
+{{- if (index .Values "external-systems") -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.registryConfigs.externalSystemsConfigurationName }}
+data:
+  external-systems-configuration.yml: |
+    external-systems:
+    {{- range $k,$v := index .Values "external-systems" }}
+    {{- if ne $k "diia" }}
+      {{ $k }}:
+      {{- range $kIn,$vIn := $v }}
+    {{- if ne $kIn "type" }}
+        {{- if eq $kIn "auth" }}
+        {{ $kIn }}:
+        {{- range $kInIn,$vInIn := $vIn }}
+        {{- if ne $kInIn "secret" }}
+          {{ $kInIn }}: {{ $vInIn }}
+        {{- end -}}
+        {{- end -}}
+        {{- else }}
+        {{ $kIn }}: {{ $vIn }}
+        {{- end -}}
+    {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- end -}}
+{{- end -}}

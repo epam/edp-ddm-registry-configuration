@@ -1,6 +1,5 @@
 {{- $authflow := (lookup "v1.edp.epam.com/v1alpha1" "KeycloakAuthFlow" .Release.Namespace "citizen-portal-dso-citizen-auth-flow") -}}
 {{- $authFlowSpec := .Values.keycloak.authFlows.citizenAuthFlow }}
-{{- $trembitaConfigValues := .Values.trembitaConfigValues }}
 apiVersion: v1.edp.epam.com/v1alpha1
 kind: KeycloakAuthFlow
 metadata:
@@ -25,21 +24,65 @@ spec:
           dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
           widgetHeight: '{{ .Values.keycloak.citizenAuthFlow.widgetHeight }}'
           entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
+          {{- if $authflow }}
+          {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
+          themeFile: {{ $ae.authenticatorConfig.config.themeFile }}
+          title: {{ $ae.authenticatorConfig.config.title }}
+          titleFull: {{ $ae.authenticatorConfig.config.titleFull }}
+          {{- else }}
           themeFile: white-theme.js
           title: ''
           titleFull: ''
+          {{- end }}
           esignHintUrl: https://diia.gov.ua/faq/1
           legalDefaultRoles: citizen;unregistered-legal;
           startPageUrl: >-
             https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}/login
-          {{- range $key,$value := $trembitaConfigValues }}
-          {{- if $authflow }}
-          {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
-          {{ $key }}: {{ get (get (get $ae "authenticatorConfig") "config") $key | squote }}
-          {{- else }}
-          {{ $key }}: {{ $value | squote }}
-          {{- end }}
-          {{- end }}
+{{- if .Values.trembita }}
+  {{- if (index (index .Values.trembita.registries "edr-registry") "user-id") }}
+  {{- $trembitaConfig := index (index .Values.trembita.registries "edr-registry") }}
+          trembitaUserId: {{ index $trembitaConfig "user-id" | squote }}
+          trembitaUrl: {{ $trembitaConfig.url | squote }}
+          trembitaProtocolVersion: {{ index $trembitaConfig "protocol-version" | squote }}
+          clientXRoadInstance: {{ index $trembitaConfig.client "x-road-instance" | squote }}
+          clientMemberClass: {{ index $trembitaConfig.client "member-class" | squote }}
+          clientMemberCode: {{ index $trembitaConfig.client "member-code" | squote }}
+          clientSubsystemCode: {{ index $trembitaConfig.client "subsystem-code" | squote }}
+          registryToken: ''
+          registryXRoadInstance: {{ index $trembitaConfig.service "x-road-instance" | squote }}
+          registryMemberClass: {{ index $trembitaConfig.service "member-class" | squote }}
+          registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
+          registrySubsystemCode: {{ index $trembitaConfig.service "subsystem-code" | squote }}
+  {{- else }}
+  {{- $trembitaConfig := index .Values.trembitaMock.registries "edr-registry" }}
+          trembitaUserId: {{ index $trembitaConfig "user-id" | squote }}
+          trembitaUrl: {{ $trembitaConfig.url | squote }}
+          trembitaProtocolVersion: {{ index $trembitaConfig "protocol-version" | squote }}
+          clientXRoadInstance: {{ index $trembitaConfig.client "x-road-instance" | squote }}
+          clientMemberClass: {{ index $trembitaConfig.client "member-class" | squote }}
+          clientMemberCode: {{ index $trembitaConfig.client "member-code" | squote }}
+          clientSubsystemCode: {{ index $trembitaConfig.client "subsystem-code" | squote }}
+          registryToken: ''
+          registryXRoadInstance: {{ index $trembitaConfig.service "x-road-instance" | squote }}
+          registryMemberClass: {{ index $trembitaConfig.service "member-class" | squote }}
+          registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
+          registrySubsystemCode: {{ index $trembitaConfig.service "subsystem-code" | squote }}
+  {{- end }}
+{{- else }}
+  {{- $trembitaConfig := index .Values.trembitaMock.registries "edr-registry" }}
+          trembitaUserId: {{ index $trembitaConfig "user-id" | squote }}
+          trembitaUrl: {{ $trembitaConfig.url | squote }}
+          trembitaProtocolVersion: {{ index $trembitaConfig "protocol-version" | squote }}
+          clientXRoadInstance: {{ index $trembitaConfig.client "x-road-instance" | squote }}
+          clientMemberClass: {{ index $trembitaConfig.client "member-class" | squote }}
+          clientMemberCode: {{ index $trembitaConfig.client "member-code" | squote }}
+          clientSubsystemCode: {{ index $trembitaConfig.client "subsystem-code" | squote }}
+          registryToken: ''
+          registryXRoadInstance: {{ index $trembitaConfig.service "x-road-instance" | squote }}
+          registryMemberClass: {{ index $trembitaConfig.service "member-class" | squote }}
+          registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
+          registrySubsystemCode: {{ index $trembitaConfig.service "subsystem-code" | squote }}
+{{- end }}
       authenticatorFlow: false
       priority: 1
       requirement: ALTERNATIVE
