@@ -29,7 +29,7 @@ spec:
   {{- end }}
   {{- if not $client.public }}
   serviceAccount:
-    {{- if $client.serviceAccountAttributes}}
+    {{- if $client.serviceAccountAttributes }}
     attributes: {{ $client.serviceAccountAttributes | toYaml | nindent 6 }}
     {{- end }}
     enabled: true

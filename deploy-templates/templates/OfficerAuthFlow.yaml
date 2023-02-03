@@ -1,0 +1,32 @@
+{{- if eq .Values.keycloak.realms.officerPortal.browserFlow "dso-officer-auth-flow" }}
+{{- $root := .Values }}
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakAuthFlow
+metadata:
+  name: {{ $root.keycloak.authFlows.officerAuthFlow.name }}
+  annotations:
+    helm.sh/resource-policy: keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  alias: {{ $root.keycloak.authFlows.officerAuthFlow.alias }}
+  authenticationExecutions:
+  {{- range $authenticator := $root.keycloak.authFlows.officerAuthFlow.authenticators }}
+  - authenticator: {{ $authenticator.name }}
+    requirement: {{ $authenticator.requirement }}
+    priority: {{ $authenticator.priority }}
+    {{- if $authenticator.authenticatorConfig }}
+    authenticatorConfig:
+      alias: {{ $authenticator.name }}-configuration
+      config:
+          {{- range $key,$value :=  $authenticator.authenticatorConfig }}
+            {{ $key }}: {{ tpl $value $ | squote }}
+        {{- end }}
+            widgetHeight: {{ $root.keycloak.authFlows.officerAuthFlow.widgetHeight | squote }}
+    {{- end }}
+  {{- end }}
+  builtIn: {{ $root.keycloak.authFlows.officerAuthFlow.builtIn }}
+  providerId: {{ $root.keycloak.authFlows.officerAuthFlow.providerId }}
+  realm: {{ $root.keycloak.authFlows.officerAuthFlow.realm }}
+  topLevel: {{ $root.keycloak.authFlows.officerAuthFlow.topLevel }}
+{{- end }}

@@ -1,0 +1,61 @@
+{{- if eq .Values.keycloak.realms.officerPortal.browserFlow "id-gov-ua-officer-redirector" }}
+{{- $root := .Values }}
+{{- range $authFlow := $root.keycloak.authFlows }}
+{{- if or (eq $authFlow.name "id-gov-ua-officer") (eq $authFlow.name "id-gov-ua-officer-redirector") }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakAuthFlow
+metadata:
+  name: {{ $authFlow.name }}
+  annotations:
+    helm.sh/resource-policy: keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  alias: {{ $authFlow.alias }}
+  authenticationExecutions:
+  {{- range $authenticator := $authFlow.authenticators }}
+  - authenticator: {{ $authenticator.name }}
+    requirement: {{ $authenticator.requirement }}
+    priority: {{ $authenticator.priority }}
+    {{- if $authenticator.authenticatorConfig }}
+    authenticatorConfig:
+      alias: {{ $authenticator.name }}-configuration
+      config:
+          {{- range $key,$value :=  $authenticator.authenticatorConfig }}
+            {{ $key }}: {{ tpl $value $ | squote }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+  builtIn: {{ $authFlow.builtIn }}
+  providerId: {{ $authFlow.providerId }}
+  realm: {{ $authFlow.realm }}
+  topLevel: {{ $authFlow.topLevel }}
+{{- end }}
+{{- end }}
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmIdentityProvider
+metadata:
+  name: idgovua-officer
+  annotations:
+    helm.sh/resource-policy: keep
+  labels:
+    created-by: {{ $root.appLabel }}
+spec:
+  realm: officer-portal
+  alias: idgovua-officer
+  authenticateByDefault: false
+  enabled: true
+  firstBrokerLoginFlowAlias: id-gov-ua-officer-auth-flow
+  providerId: idgovua-officer
+  config:
+    clientId: ''
+    clientSecret: ''
+    url: {{ $root.keycloak.identityProviders.idGovUa.url }}
+    hideOnLoginPage: "true"
+    dsoCertificateUrl: http://digital-signature-ops:8080/api/key/certificate
+    dsoDecryptInfoUrl: http://digital-signature-ops:8080/api/key/decrypt
+    syncMode: "IMPORT"
+    useJwksUrl: "true"
+{{- end }}

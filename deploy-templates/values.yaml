@@ -755,6 +755,10 @@ keycloak:
         enabled: true
         autoRedirectEnabled: false
         name: '{{- template "keycloak.registryGroup.name" . -}}'
+      realmEventConfig:
+        eventsListeners:
+          - jboss-logging
+          - update-user-event-listener
 
   authFlows:
     citizenIdGovUaAuthFlow:
@@ -777,6 +781,49 @@ keycloak:
           priority: 2
           authenticatorConfig:
             citizenDefaultRoles: "citizen;unregistered-individual;"
+
+    officerIdGovUaAuthFlow:
+      name: id-gov-ua-officer
+      realm: officer-portal
+      alias: id-gov-ua-officer-auth-flow
+      builtIn: false
+      providerId: basic-flow
+      topLevel: true
+      authenticators:
+        officerReviewConfigAuthenticator:
+          name: idp-review-profile
+          requirement: REQUIRED
+          priority: 1
+          authenticatorConfig:
+            update.profile.on.first.login: "off"
+        officerRolesAuthenticator:
+          name: id-gov-ua-officer-authenticator
+          requirement: REQUIRED
+          priority: 2
+          authenticatorConfig:
+            startPageUrl: '{{ template "officer-portal.url" . }}/officer/login'
+            themeFile: white-theme.js
+            title: ''
+            titleFull: ''
+
+    idGovUaOfficerRedirectorFlow:
+      name: id-gov-ua-officer-redirector
+      realm: officer-portal
+      alias: id-gov-ua-officer-redirector
+      builtIn: false
+      providerId: basic-flow
+      topLevel: true
+      authenticators:
+        authcookie:
+          name: auth-cookie
+          requirement: ALTERNATIVE
+          priority: 0
+        officerRedirectorConfiguration:
+          name: identity-provider-redirector
+          requirement: REQUIRED
+          priority: 1
+          authenticatorConfig:
+            defaultProvider: "idgovua-officer"
 
     officerAuthFlow:
       name: officer-portal-dso-officer-auth-flow

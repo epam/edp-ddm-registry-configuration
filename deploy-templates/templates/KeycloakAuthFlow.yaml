@@ -1,5 +1,6 @@
 {{- $root := .Values }}
 {{- range $authFlow := .Values.keycloak.authFlows }}
+{{- if and (ne $authFlow.name "id-gov-ua-officer") (ne $authFlow.name "id-gov-ua-officer-redirector") (ne $authFlow.name "officer-portal-dso-officer-auth-flow") }}
 ---
 apiVersion: v1.edp.epam.com/v1alpha1
 kind: KeycloakAuthFlow
@@ -29,4 +30,5 @@ spec:
   providerId: {{ $authFlow.providerId }}
   realm: {{ $authFlow.realm }}
   topLevel: {{ $authFlow.topLevel }}
+{{- end -}}
 {{- end -}}
