@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-regulations
+data:
+  registry-regulations: |
+    apiVersion: v2.edp.epam.com/v1alpha1
+    kind: Codebase
+    metadata:
+      name: registry-regulations
+      labels:
+        recreateByCleanup: "true"
+    spec:
+      emptyProject: false
+      commitMessagePattern: null
+      jenkinsSlave: dataplatform-jenkins-agent
+      gitUrlPath: null
+      defaultBranch: master
+    {{- if eq .Values.edpProject "control-plane" }}
+      branchToCopyInDefaultBranch: {{ .Values.codebases.registryRegulations.registryRegulationsRepoVersion }}
+    {{- else }}
+      branchToCopyInDefaultBranch: {{ .Values.registryRegulations.registryRegulationsRepoVersion }}
+    {{- end }}
+      buildTool: none
+      route: null
+      perf: null
+      versioning:
+        startFrom: 0.0.1
+        type: edp
+      jobProvisioning: registry
+      repository:
+    {{- if eq .Values.edpProject "control-plane" }}
+        url: {{ .Values.codebases.registryRegulations.referenceRepoUrl }}
+    {{- else }}
+        url: 'https://gerrit-{{ .Values.edpProject }}.{{ .Values.dnsWildcard }}/mdtu-ddm/registry-regulations/empty-template-registry-regulation'
+    {{- end }}
+      lang: groovy-pipeline
+      deploymentScript: ''
+      strategy: clone
+      jiraIssueMetadataPayload: null
+      gitServer: gerrit
+      testReportFramework: null
+      ticketNamePattern: null
+      type: library
+      database: null
+      description: null
+      framework: null
+      ciTool: Jenkins
+    ---
+    apiVersion: v2.edp.epam.com/v1alpha1
+    kind: CodebaseBranch
+    metadata:
+    {{- if eq .Values.edpProject "control-plane" }}
+      name: registry-regulations-master
+    {{- else }}
+      name: registry-regulations-{{ .Values.registryRegulations.registryRegulationsRepoVersion | toString | replace "." "-" | replace "/" "-" | lower }}
+    {{- end }}
+      labels:
+        affiliatedWith: "registry-regulations"
+        recreateByCleanup: "true"
+    spec:
+      branchName: master
+      codebaseName: registry-regulations
+      fromCommit: ''
+      release: false
+      version: 0.0.1
