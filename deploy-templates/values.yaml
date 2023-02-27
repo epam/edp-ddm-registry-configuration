@@ -980,9 +980,10 @@ portals:
 trembitaMock:
   registries:
     edr-registry:
+      name: trembita-edr-registry-mock
       user-id: MOCK
       protocol-version: "4.0"
-      url: 'https://trembita-edr-registry-mock.apps.cicd2.mdtu-ddm.projects.epam.com/mockEDRService'
+      url: '{{ template "trembita-edr-registry-mock-url" . }}/mockEDRService'
       client:
         x-road-instance: MOCK
         member-class: MOCK

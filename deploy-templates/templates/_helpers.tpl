@@ -81,3 +81,7 @@
 {{- define "admin-routes.whitelist.annotation" -}}
 haproxy.router.openshift.io/ip_whitelist: {{ (include "admin-routes.whitelist.cidr" . | default "0.0.0.0/0") | quote }}
 {{- end -}}
+
+{{- define "trembita-edr-registry-mock-url" -}}
+{{- printf "%s%s.%s" "https://" (index .Values.trembitaMock.registries "edr-registry").name .Values.dnsWildcard }}
+{{- end }}

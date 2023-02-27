@@ -56,13 +56,13 @@ spec:
   {{- else }}
   {{- $trembitaConfig := index .Values.trembitaMock.registries "edr-registry" }}
           trembitaUserId: {{ index $trembitaConfig "user-id" | squote }}
-          trembitaUrl: {{ $trembitaConfig.url | squote }}
+          trembitaUrl: {{ tpl $trembitaConfig.url . | squote }}
           trembitaProtocolVersion: {{ index $trembitaConfig "protocol-version" | squote }}
           clientXRoadInstance: {{ index $trembitaConfig.client "x-road-instance" | squote }}
           clientMemberClass: {{ index $trembitaConfig.client "member-class" | squote }}
           clientMemberCode: {{ index $trembitaConfig.client "member-code" | squote }}
           clientSubsystemCode: {{ index $trembitaConfig.client "subsystem-code" | squote }}
-          registryToken: ''
+          registryToken: 'token'
           registryXRoadInstance: {{ index $trembitaConfig.service "x-road-instance" | squote }}
           registryMemberClass: {{ index $trembitaConfig.service "member-class" | squote }}
           registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
@@ -71,13 +71,13 @@ spec:
 {{- else }}
   {{- $trembitaConfig := index .Values.trembitaMock.registries "edr-registry" }}
           trembitaUserId: {{ index $trembitaConfig "user-id" | squote }}
-          trembitaUrl: {{ $trembitaConfig.url | squote }}
+          trembitaUrl: {{ tpl $trembitaConfig.url . | squote }}
           trembitaProtocolVersion: {{ index $trembitaConfig "protocol-version" | squote }}
           clientXRoadInstance: {{ index $trembitaConfig.client "x-road-instance" | squote }}
           clientMemberClass: {{ index $trembitaConfig.client "member-class" | squote }}
           clientMemberCode: {{ index $trembitaConfig.client "member-code" | squote }}
           clientSubsystemCode: {{ index $trembitaConfig.client "subsystem-code" | squote }}
-          registryToken: ''
+          registryToken: 'token'
           registryXRoadInstance: {{ index $trembitaConfig.service "x-road-instance" | squote }}
           registryMemberClass: {{ index $trembitaConfig.service "member-class" | squote }}
           registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
