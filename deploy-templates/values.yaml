@@ -956,10 +956,6 @@ ceph:
       name: lowcode-file-storage
       bucketclass: registry-bucket-class
       storageClassName: registry-bucket
-    lowcodeFormDataStorage:
-      name: lowcode-form-data-storage
-      bucketclass: registry-bucket-class
-      storageClassName: registry-bucket
     responseCephBucket:
       name: response-ceph-bucket
       bucketclass: registry-bucket-class
