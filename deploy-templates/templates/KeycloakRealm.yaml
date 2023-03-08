@@ -13,6 +13,9 @@ metadata:
 spec:
   keycloakOwner: {{ $realm.keycloakOwner }}
   realmName:  {{ template "keycloak.realmName" (dict "root" $ "realm" $realm "release" $release) }}
+  {{- if or (eq $realm.name "citizen-portal")  (eq $realm.name "officer-portal") }}
+  frontendUrl: {{ template "keycloak.frontendUrl" $ }}
+  {{- end }}
   ssoRealmEnabled: {{ $realm.ssoRealm.enabled }}
   {{- if $realm.ssoRealm.enabled }}
   ssoAutoRedirectEnabled: {{ $realm.ssoRealm.autoRedirectEnabled }}

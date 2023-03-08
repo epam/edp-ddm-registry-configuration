@@ -32,6 +32,11 @@
 {{- end }}
 {{- end }}
 
+{{- define "keycloak.frontendUrl" }}
+{{- $keycloakHost := .Values.keycloak.customHost | default .Values.keycloak.host }}
+{{- printf "%s%s%s" "https://" $keycloakHost "/auth/"}}
+{{- end }}
+
 {{- define "smtp-internal-password" }}
 {{- $secretName := .secretName }}
 {{- $namespace := .namespace }}
