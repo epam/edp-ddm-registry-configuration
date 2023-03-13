@@ -59,6 +59,16 @@ keycloak:
           name: edrpou
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: roles
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+          name: realmRoles
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-realm-role-mapper
 
     bpmsRealmAdminCitizenPortal:
       name: bpms-realm-admin-citizen-portal
