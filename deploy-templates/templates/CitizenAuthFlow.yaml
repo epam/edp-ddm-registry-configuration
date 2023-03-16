@@ -3,7 +3,7 @@
 apiVersion: v1.edp.epam.com/v1alpha1
 kind: KeycloakAuthFlow
 metadata:
-  name: citizen-portal-dso-citizen-auth-flow
+  name: {{ $authFlowSpec.name }}
   annotations:
     "helm.sh/resource-policy": keep
   labels:
@@ -22,7 +22,8 @@ spec:
           citizenDefaultRoles: citizen;unregistered-individual;
           widgetUrl: '{{ .Values.signWidget.url }}'
           dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
-          widgetHeight: '{{ .Values.keycloak.citizenAuthFlow.widgetHeight }}'
+          widgetHeight: '{{ $authFlowSpec.widgetHeight }}'
+          edrCheck: '{{ $authFlowSpec.edrCheck }}'
           entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
           {{- if $authflow }}
           {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
