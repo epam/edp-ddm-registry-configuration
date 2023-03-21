@@ -931,6 +931,37 @@ envVariables:
 signWidget:
   url: https://eu.iit.com.ua/sign-widget/v20200922/
 
+dataComponents:
+  codebases:
+    kafkaApi:
+      name: "registry-kafka-api"
+      version: "0.0.1"
+      buildTool: "docker"
+      jenkinsAgent: "dataplatform-jenkins-agent"
+      jobProvisioner: "registry"
+      codebaseBranch: "master"
+    soapApi:
+      name: "registry-soap-api"
+      version: "0.0.1"
+      buildTool: "docker"
+      jenkinsAgent: "dataplatform-jenkins-agent"
+      jobProvisioner: "registry"
+      codebaseBranch: "master"
+    restApi:
+      name: "registry-rest-api"
+      version: "0.0.1"
+      buildTool: "docker"
+      jenkinsAgent: "dataplatform-jenkins-agent"
+      jobProvisioner: "registry"
+      codebaseBranch: "master"
+    model:
+      name: "registry-model"
+      version: "0.0.1"
+      buildTool: "docker"
+      jenkinsAgent: "dataplatform-jenkins-agent"
+      jobProvisioner: "registry"
+      codebaseBranch: "master"
+
 ceph:
   objectBucketClaims:
     datafactoryCephBucket:

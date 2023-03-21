@@ -1,0 +1,15 @@
+{{- range $dataComponent := .Values.dataComponents.codebases }}
+---
+apiVersion: v2.edp.epam.com/v1alpha1
+kind: CodebaseBranch
+metadata:
+  name: {{ $dataComponent.name }}-{{ $dataComponent.codebaseBranch }}
+  labels:
+    version: {{ $dataComponent.version }}
+spec:
+  branchName: {{ $dataComponent.codebaseBranch }}
+  codebaseName: {{ $dataComponent.name }}
+  fromCommit: ''
+  release: false
+  version: {{ $dataComponent.version }}
+{{- end }}

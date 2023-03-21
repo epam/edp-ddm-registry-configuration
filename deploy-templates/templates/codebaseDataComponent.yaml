@@ -1,0 +1,25 @@
+{{- range $dataComponent := .Values.dataComponents.codebases }}
+---
+apiVersion: v2.edp.epam.com/v1alpha1
+kind: Codebase
+metadata:
+  name: {{ $dataComponent.name }}
+  labels:
+    version: {{ $dataComponent.version }}
+spec:
+  jenkinsSlave: {{ $dataComponent.jenkinsAgent }}
+  defaultBranch: {{ $dataComponent.codebaseBranch }}
+  buildTool: {{ $dataComponent.buildTool }}
+  ciTool: Jenkins
+  versioning:
+    startFrom: {{ $dataComponent.version }}
+    type: edp
+  jobProvisioning: {{ $dataComponent.jobProvisioner }}
+  lang: Java
+  framework: Spring
+  type: application
+  deploymentScript: helm-chart
+  gitServer: gerrit
+  strategy: create
+  emptyProject: true
+{{- end }}
