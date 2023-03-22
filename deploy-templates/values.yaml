@@ -538,7 +538,7 @@ keycloak:
       public: true
       targetRealm:
         name: officer-portal
-      webUrl: "https://redash-viewer-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "officer-portal.url" . }}/reports'
       directAccess: false
       audRequired: false
 
@@ -548,7 +548,7 @@ keycloak:
       public: true
       targetRealm:
         name: officer-portal
-      webUrl: "https://redash-viewer-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "officer-portal.url" . }}/reports'
       directAccess: true
       audRequired: false
       attributes:
