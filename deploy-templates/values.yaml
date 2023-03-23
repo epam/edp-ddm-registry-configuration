@@ -862,10 +862,10 @@ keycloak:
           requirement: ALTERNATIVE
           priority: 0
 
-    citizenAuthFlow:
-      name: citizen-portal-dso-citizen-auth-flow
-      widgetHeight: '400'
-      edrCheck: true
+  citizenAuthFlow:
+    name: citizen-portal-dso-citizen-auth-flow
+    widgetHeight: '400'
+    edrCheck: true
 
   realmGroups:
     camundaAdmin:
