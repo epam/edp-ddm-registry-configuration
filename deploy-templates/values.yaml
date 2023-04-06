@@ -505,6 +505,11 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: "custom-attributes"
+          protocol: "saml"
+          protocolMapper: "saml-user-custom-attributes-mapper"
 
     redashViewerLogout:
       name: redash-viewer-logout
@@ -573,6 +578,11 @@ keycloak:
           name: "KATOTTG"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: "custom-attributes"
+          protocol: "saml"
+          protocolMapper: "saml-user-custom-attributes-mapper"
 
     trembitaInvoker:
       name: trembita-invoker
