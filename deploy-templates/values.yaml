@@ -267,6 +267,16 @@ keycloak:
           name: representative
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+            id.token.claim: 'true'
+            access.token.claim: 'true'
+            user.attributes.exclude: 'edrpou##drfo##fullName##subjectType##representative'
+          name: All User Attributes Mapper
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-custom-attributes-mapper
 
     bpmsSystemUserOfficerPortal:
       name: bpms-system-user-officer-portal
@@ -445,6 +455,16 @@ keycloak:
           name: KATOTTG
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+            id.token.claim: 'true'
+            access.token.claim: 'true'
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: All User Attributes Mapper
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-custom-attributes-mapper
 
     redashAdminLogout:
       name: redash-admin-logout
