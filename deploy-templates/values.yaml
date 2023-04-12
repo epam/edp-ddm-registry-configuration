@@ -836,6 +836,8 @@ keycloak:
           priority: 1
           authenticatorConfig:
             defaultProvider: "idgovua-officer"
+            selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
+            selfRegistrationDefaultRoles: unregistered-officer
 
     officerAuthFlow:
       name: officer-portal-dso-officer-auth-flow
@@ -857,6 +859,8 @@ keycloak:
             themeFile: white-theme.js
             title: ''
             titleFull: ''
+            selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
+            selfRegistrationDefaultRoles: unregistered-officer
         authcookie:
           name: auth-cookie
           requirement: ALTERNATIVE
@@ -922,6 +926,14 @@ keycloak:
             - individual
             - entrepreneur
             - legal
+    officerSystemRoles:
+      name: officer-system-roles
+      realm: officer-portal
+      role:
+        batch:
+          name: officer-system-roles
+          list:
+            - unregistered-officer
 
 caIsolation: false
 
