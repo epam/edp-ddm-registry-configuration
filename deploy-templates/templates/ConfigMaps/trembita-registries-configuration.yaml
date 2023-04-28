@@ -20,9 +20,11 @@ data:
             {{- end -}}
             {{- end -}}
             {{- if or (eq $kIn "client") (eq $kIn "service") }}
+            {{- if $vIn }}
           {{ $kIn }}:
             {{- range $kInInCS,$vInInCS := $vIn }}
             {{ $kInInCS }}: {{ $vInInCS }}
+            {{- end -}}
             {{- end -}}
                 {{- else }}
             {{- if ne $kIn "auth" }}
