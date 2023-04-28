@@ -442,6 +442,7 @@ keycloak:
           name: rnokpp
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        # DEPRECATED will be removed in future release
         - config:
             jsonType.label: String
             name: KATOTTG
@@ -590,6 +591,7 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        # DEPRECATED will be removed in future release
         - config:
             aggregate.attrs: ""
             attribute.name: "KATOTTG"
