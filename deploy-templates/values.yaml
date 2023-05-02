@@ -473,7 +473,7 @@ keycloak:
       public: true
       targetRealm:
         name: admin
-      webUrl: "https://redash-admin-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "admin-tools.url" . }}/reports'
       directAccess: false
       audRequired: false
 
@@ -483,7 +483,7 @@ keycloak:
       public: true
       targetRealm:
         name: admin
-      webUrl: "https://redash-admin-{{ .Release.Namespace }}.{{ .Values.dnsWildcard }}"
+      webUrl: '{{ template "admin-tools.url" . }}/reports'
       directAccess: true
       audRequired: true
       attributes:
