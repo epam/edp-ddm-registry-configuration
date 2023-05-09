@@ -267,6 +267,16 @@ keycloak:
           name: representative
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+            id.token.claim: 'true'
+            access.token.claim: 'true'
+            user.attributes.exclude: 'edrpou##drfo##fullName##subjectType##representative'
+          name: All User Attributes Mapper
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-custom-attributes-mapper
 
     bpmsSystemUserOfficerPortal:
       name: bpms-system-user-officer-portal
@@ -432,6 +442,7 @@ keycloak:
           name: rnokpp
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        # DEPRECATED will be removed in future release
         - config:
             jsonType.label: String
             name: KATOTTG
@@ -445,6 +456,16 @@ keycloak:
           name: KATOTTG
           protocol: openid-connect
           protocolMapper: oidc-usermodel-attribute-mapper
+        - config:
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+            id.token.claim: 'true'
+            access.token.claim: 'true'
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: All User Attributes Mapper
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-custom-attributes-mapper
 
     redashAdminLogout:
       name: redash-admin-logout
@@ -505,6 +526,11 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: "custom-attributes"
+          protocol: "saml"
+          protocolMapper: "saml-user-custom-attributes-mapper"
 
     redashViewerLogout:
       name: redash-viewer-logout
@@ -565,6 +591,7 @@ keycloak:
           name: "fullName"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        # DEPRECATED will be removed in future release
         - config:
             aggregate.attrs: ""
             attribute.name: "KATOTTG"
@@ -573,6 +600,11 @@ keycloak:
           name: "KATOTTG"
           protocol: "saml"
           protocolMapper: "saml-user-attribute-mapper"
+        - config:
+            user.attributes.exclude: 'edrpou##drfo##fullName'
+          name: "custom-attributes"
+          protocol: "saml"
+          protocolMapper: "saml-user-custom-attributes-mapper"
 
     trembitaInvoker:
       name: trembita-invoker
