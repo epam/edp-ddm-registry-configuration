@@ -868,6 +868,8 @@ keycloak:
           priority: 2
           authenticatorConfig:
             citizenDefaultRoles: "citizen;unregistered-individual;"
+            entrepreneurDefaultRoles: "citizen;unregistered-entrepreneur;"
+            legalDefaultRoles: "citizen;unregistered-legal;"
 
     officerIdGovUaAuthFlow:
       name: id-gov-ua-officer
