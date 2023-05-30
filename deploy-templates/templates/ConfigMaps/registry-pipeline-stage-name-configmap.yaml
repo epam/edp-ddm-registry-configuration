@@ -9,3 +9,4 @@ data:
   edpProject: {{ .Values.edpProject }}
   signWidgetUrl: {{ .Values.signWidget.url }}
   digitalSignatureOpsUrl: {{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner
+  maxCandidateVersions: {{ .Values.global.regulationManagement.maxCandidateVersions | squote }}
