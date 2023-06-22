@@ -705,6 +705,49 @@ keycloak:
           name: fullName
           protocol: openid-connect
           protocolMapper: oidc-hardcoded-claim-mapper
+    publicUser:
+      name: public-user
+      clientId: public-user
+      public: false
+      secretName: keycloak-public-user-client-secret
+      targetRealm:
+        name: external-system
+      directAccess: false
+      audRequired: false
+      protocolMappers:
+        - config:
+            access.token.claim: 'true'
+            claim.name: drfo
+            claim.value: '0'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: drfo
+            userinfo.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: edrpou
+            claim.value: '0'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: edrpou
+            userinfo.token.claim: 'true'
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: fullName
+            claim.value: Користувач публічним API
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: fullName
+            userinfo.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
 
   clientScopes:
     redashAdmin:
