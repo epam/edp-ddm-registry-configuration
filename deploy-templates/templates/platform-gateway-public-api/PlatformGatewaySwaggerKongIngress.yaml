@@ -1,0 +1,25 @@
+{{ $root := .Values }}
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: platform-gateway-public-documentation
+  annotations:
+    konghq.com/methods: GET
+    konghq.com/preserve-host: 'false'
+    konghq.com/protocols: http
+    konghq.com/strip-path: 'false'
+spec:
+  ingressClassName: kong
+  rules:
+    - host: platform-gateway-{{ $root.stageName }}.{{ $root.dnsWildcard }}
+      http:
+        paths:
+{{- range list "openapi" "swagger-ui" "v3" }}
+          - path: /api/public/data-factory/{{ . }}
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: platform-gateway-public-documentation
+                port:
+                  number: 8080
+{{- end }}

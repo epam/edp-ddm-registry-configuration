@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: platform-gateway-public-documentation
+  labels:
+    app: platform-gateway
+  annotations:
+    ingress.kubernetes.io/service-upstream: 'true'
+    konghq.com/override: kong-set-timeouts
+    konghq.com/plugins: public-docs-proxy-cache
+    konghq.com/protocol: http
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: platform-gateway
+  type: ClusterIP
+  sessionAffinity: None
