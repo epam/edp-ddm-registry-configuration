@@ -1,0 +1,16 @@
+{{- if .Values.publicApi -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kong-public-api-{{ .Release.Namespace }}
+  namespace: openshift-monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      app: kong-prometheus-monitoring
+{{- end }}

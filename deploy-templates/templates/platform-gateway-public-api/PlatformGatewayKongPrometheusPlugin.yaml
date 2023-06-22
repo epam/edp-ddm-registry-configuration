@@ -1,0 +1,14 @@
+{{- if .Values.publicApi -}}
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: public-endpoints-prometheus
+  annotations:
+    kubernetes.io/ingress.class: kong
+plugin: prometheus
+config:
+  status_code_metrics: {{ .Values.kongPluginsConfig.pluginsPrometheusStatusCodeMetrics }}
+  latency_metrics: {{ .Values.kongPluginsConfig.pluginsPrometheusLatencyMetrics }}
+  bandwidth_metrics: {{ .Values.kongPluginsConfig.pluginsPrometheusBandwidthMetrics }}
+  per_consumer: {{ .Values.kongPluginsConfig.pluginsPrometheusPerConsumerMetrics }}
+{{- end }}

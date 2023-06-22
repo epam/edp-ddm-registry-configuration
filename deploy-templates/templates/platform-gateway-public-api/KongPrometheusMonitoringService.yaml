@@ -1,0 +1,17 @@
+{{- if .Values.publicApi -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-prometheus-monitoring
+  labels:
+    app: kong-prometheus-monitoring
+spec:
+  selector:
+    app.kubernetes.io/name: kong
+  type: ClusterIP
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 8100
+      targetPort: 8100
+{{- end }}
