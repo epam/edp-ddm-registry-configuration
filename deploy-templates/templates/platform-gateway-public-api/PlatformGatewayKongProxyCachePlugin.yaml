@@ -1,0 +1,20 @@
+kind: KongPlugin
+apiVersion: configuration.konghq.com/v1
+metadata:
+  name: public-docs-proxy-cache
+config:
+  cache_ttl: {{ .Values.kongPluginsConfig.pluginsProxyCacheTtl }}
+  content_type:
+    - application/json
+    - image/png
+    - text/html
+    - text/plain
+    - application/json; charset=utf-8
+    - text/plain; charset=utf-8
+    - text/css
+  request_method:
+    - GET
+  response_code:
+    - 200
+  strategy: memory
+plugin: proxy-cache
