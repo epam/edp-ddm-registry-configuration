@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: platform-gateway-kong-proxy
+spec:
+  host: platform-gateway-{{ .Values.stageName }}.{{ .Values.dnsWildcard }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  path: /api/public/data-factory
+  to:
+    kind: Service
+    name: istio-ingressgateway-{{ .Values.stageName }}
+  port:
+    targetPort: http2

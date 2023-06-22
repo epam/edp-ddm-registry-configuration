@@ -1,0 +1,35 @@
+{{ if .Values.publicApi }}
+{{ $root := .Values }}
+{{- range $publicEndpoints := .Values.publicApi }}
+{{ if $publicEndpoints.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    {{- if $publicEndpoints.limits }}
+    konghq.com/plugins: public-{{ $publicEndpoints.name }}-rate-limiting,public-endpoints-prometheus
+    {{- else }}
+    konghq.com/plugins: public-endpoints-prometheus
+    {{- end }}
+    konghq.com/preserve-host: 'false'
+    konghq.com/protocols: 'http'
+    konghq.com/strip-path: 'false'
+    konghq.com/methods: GET
+  name: platform-gateway-{{ $publicEndpoints.name }}
+spec:
+  ingressClassName: kong
+  rules:
+    - host: platform-gateway-{{ $root.stageName }}.{{ $root.dnsWildcard }}
+      http:
+        paths:
+          - path: /api/public/data-factory{{ $publicEndpoints.url }}
+            pathType: Exact
+            backend:
+              service:
+                name: platform-gateway-public-api
+                port:
+                  number: 8080
+{{- end }}
+{{- end }}
+{{- end }}
