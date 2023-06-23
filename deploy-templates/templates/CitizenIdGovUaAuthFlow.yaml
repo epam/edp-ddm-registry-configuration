@@ -18,7 +18,7 @@ spec:
         update.profile.on.first.login: "off"
     - authenticator: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}
       authenticatorConfig:
-        alias: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig }}-configuration
+        alias: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}-configuration
         config:
           citizenDefaultRoles: '{{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig.citizenDefaultRoles }}'
           entrepreneurDefaultRoles: '{{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig.entrepreneurDefaultRoles }}'
