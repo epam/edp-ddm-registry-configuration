@@ -15,7 +15,8 @@ spec:
       priority: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.priority }}
       authenticatorConfig:
         alias: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.name }}-configuration
-        update.profile.on.first.login: "off"
+        config:
+          update.profile.on.first.login: "off"
     - authenticator: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}
       authenticatorConfig:
         alias: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}-configuration
