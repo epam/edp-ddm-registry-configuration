@@ -1,0 +1,16 @@
+{{ if .Values.publicApi }}
+{{- range $publicEndpoints := .Values.publicApi }}
+{{ if and $publicEndpoints.enabled $publicEndpoints.limits }}
+---
+kind: KongPlugin
+apiVersion: configuration.konghq.com/v1
+metadata:
+  name: public-{{ $publicEndpoints.name }}-rate-limiting
+configFrom:
+  secretKeyRef:
+    name: public-{{ $publicEndpoints.name }}-rate-limiting
+    key: by-header
+plugin: rate-limiting
+{{- end }}
+{{- end }}
+{{- end }}

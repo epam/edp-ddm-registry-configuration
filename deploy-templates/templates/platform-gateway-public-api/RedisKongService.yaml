@@ -1,0 +1,22 @@
+{{- $root := .Values }}
+{{ if $root.publicApi }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ $root.kongRedis.serviceName }}
+spec:
+  clusterIP: None
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ $root.kongRedis.port }}
+      targetPort: 6379
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app.kubernetes.io/component: redis
+{{- end }}

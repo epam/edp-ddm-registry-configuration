@@ -1147,3 +1147,8 @@ externalSecrets:
     refreshInterval: "10s"
     target:
       name: diia-secret
+
+kongRedis:
+  serviceName: redis-kong-rate-limiting
+  secretName: redis-auth
+  port: 26379
