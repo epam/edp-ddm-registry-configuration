@@ -10,6 +10,7 @@ spec:
       - {{ .Release.Namespace }}
   endpoints:
     - port: metrics
+      interval: 30s
   selector:
     matchLabels:
       app: kong-prometheus-monitoring
