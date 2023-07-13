@@ -33,7 +33,11 @@ spec:
   {{- end }}
   {{- if $realm.loginTheme }}
   browserSecurityHeaders:
+    {{- if eq $realm.name "citizen-portal" }}
+    contentSecurityPolicy: "frame-src 'self' https://{{ (urlParse $root.keycloak.citizenAuthFlow.widget.url).host }}; frame-ancestors 'self'; object-src 'none';"
+    {{- else }}
     contentSecurityPolicy: "frame-src 'self' https://{{ (urlParse $root.signWidget.url).host }}; frame-ancestors 'self'; object-src 'none';"
+    {{- end }}
   {{- end }}
   {{- if eq $realm.name "officer-portal" }}
   browserFlow: {{ $root.keycloak.realms.officerPortal.browserFlow }}
