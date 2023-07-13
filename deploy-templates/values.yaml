@@ -868,6 +868,8 @@ keycloak:
           priority: 2
           authenticatorConfig:
             citizenDefaultRoles: "citizen;unregistered-individual;"
+            entrepreneurDefaultRoles: "citizen;unregistered-entrepreneur;"
+            legalDefaultRoles: "citizen;unregistered-legal;"
 
     officerIdGovUaAuthFlow:
       name: id-gov-ua-officer
@@ -943,8 +945,11 @@ keycloak:
 
   citizenAuthFlow:
     name: citizen-portal-dso-citizen-auth-flow
-    widgetHeight: '400'
     edrCheck: true
+    authType: widget
+    widget:
+      url: https://eu.iit.com.ua/sign-widget/v20200922/
+      height: '720'
 
   realmGroups:
     camundaAdmin:

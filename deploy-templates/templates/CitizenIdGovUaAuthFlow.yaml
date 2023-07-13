@@ -1,5 +1,4 @@
-{{- $authflow := (lookup "v1.edp.epam.com/v1alpha1" "KeycloakAuthFlow" .Release.Namespace "citizen-portal-dso-citizen-auth-flow") -}}
-{{- $authFlowSpec := .Values.keycloak.citizenAuthFlow }}
+{{- $authFlowSpec := .Values.keycloak.authFlows.citizenIdGovUaAuthFlow }}
 apiVersion: v1.edp.epam.com/v1alpha1
 kind: KeycloakAuthFlow
 metadata:
@@ -9,37 +8,23 @@ metadata:
   labels:
     created-by: {{ .Values.appLabel }}
 spec:
-  alias: dso-citizen-auth-flow
+  alias: {{ $authFlowSpec.alias }}
   authenticationExecutions:
-    - authenticator: auth-cookie
-      authenticatorFlow: false
-      priority: 0
-      requirement: ALTERNATIVE
-    - authenticator: ds-citizen-authenticator
+    - authenticator: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.name }}
+      requirement: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.requirement }}
+      priority: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.priority }}
       authenticatorConfig:
-        alias: ds-citizen-authenticator-configuration
+        alias: {{ $authFlowSpec.authenticators.reviewConfigAuthenticator.name }}-configuration
         config:
-          citizenDefaultRoles: citizen;unregistered-individual;
-          widgetUrl: '{{ $authFlowSpec.widget.url }}'
-          dsoUrl: '{{ .Values.envVariables.digitalSignatureOpsUrl }}/api/esignature/owner'
-          widgetHeight: '{{ $authFlowSpec.widget.height }}'
-          edrCheck: '{{ $authFlowSpec.edrCheck }}'
-          authType: '{{ $authFlowSpec.authType }}'
-          entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
-          {{- if $authflow }}
-          {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
-          themeFile: {{ $ae.authenticatorConfig.config.themeFile }}
-          title: {{ $ae.authenticatorConfig.config.title }}
-          titleFull: {{ $ae.authenticatorConfig.config.titleFull }}
-          {{- else }}
-          themeFile: white-theme.js
-          title: ''
-          titleFull: ''
-          {{- end }}
-          esignHintUrl: https://diia.gov.ua/faq/1
-          legalDefaultRoles: citizen;unregistered-legal;
-          startPageUrl: >-
-            https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}/login
+          update.profile.on.first.login: "off"
+    - authenticator: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}
+      authenticatorConfig:
+        alias: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.name }}-configuration
+        config:
+          citizenDefaultRoles: '{{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig.citizenDefaultRoles }}'
+          entrepreneurDefaultRoles: '{{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig.entrepreneurDefaultRoles }}'
+          legalDefaultRoles: '{{ $authFlowSpec.authenticators.citizenRolesAuthenticator.authenticatorConfig.legalDefaultRoles }}'
+          edrCheck: '{{ .Values.keycloak.citizenAuthFlow.edrCheck }}'
 {{- if .Values.trembita }}
   {{- if (index (index .Values.trembita.registries "edr-registry") "user-id") }}
   {{- $trembitaConfig := index (index .Values.trembita.registries "edr-registry") }}
@@ -85,11 +70,9 @@ spec:
           registryMemberCode: {{ index $trembitaConfig.service "member-code" | squote }}
           registrySubsystemCode: {{ index $trembitaConfig.service "subsystem-code" | squote }}
 {{- end }}
-      authenticatorFlow: false
-      priority: 1
-      requirement: ALTERNATIVE
-  builtIn: false
-  description: ''
-  providerId: basic-flow
-  realm: citizen-portal
-  topLevel: true
+      priority: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.priority }}
+      requirement: {{ $authFlowSpec.authenticators.citizenRolesAuthenticator.requirement }}
+  builtIn: {{ $authFlowSpec.builtIn }}
+  providerId: {{ $authFlowSpec.providerId }}
+  realm: {{ $authFlowSpec.realm }}
+  topLevel: {{ $authFlowSpec.topLevel }}
