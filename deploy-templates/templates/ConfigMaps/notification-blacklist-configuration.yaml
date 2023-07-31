@@ -1,0 +1,13 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.registryConfigs.notificationBlacklistConfigurationName }}
+data:
+  notification-blacklist-configuration.yml: |-
+    blacklist:
+      email:
+        domains:
+          {{ toYaml .Values.validation.email.blacklist.domains | nindent 10 | trim }}
+
+  notification-blacklist-configuration.js: |-
+    var EMAIL_BLACKLISTED_DOMAINS = {{ toPrettyJson .Values.validation.email.blacklist.domains | indent 4 | trim }}
