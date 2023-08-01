@@ -5,12 +5,20 @@
     {{- printf "%s-%s" $release.Namespace $realm.name }}
 {{- end -}}
 
+{{- define "portal.default.host" }}
+{{- $root := .root }}
+{{- $portalName := .portalName }}
+{{- printf "%s-%s-%s.%s" $portalName $root.Values.cdPipelineName $root.Values.cdPipelineStageName $root.Values.dnsWildcard }}
+{{- end }}
+
 {{- define "officer-portal.url" -}}
-{{- printf "%s%s" "https://" (.Values.portals.officer.customDns.host | default ( printf "%s-%s-%s.%s" "officer-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard )) }}
+{{ $host := ternary .Values.portals.officer.customDns.host (include "portal.default.host" (dict  "root" . "portalName" "officer-portal")) .Values.portals.officer.customDns.enabled }}
+{{- printf "%s%s" "https://" $host }}
 {{- end }}
 
 {{- define "citizen-portal.url" -}}
-{{- printf "%s%s" "https://" (.Values.portals.citizen.customDns.host | default ( printf "%s-%s-%s.%s" "citizen-portal" .Values.cdPipelineName .Values.cdPipelineStageName .Values.dnsWildcard )) }}
+{{ $host := ternary .Values.portals.citizen.customDns.host (include "portal.default.host" (dict  "root" . "portalName" "citizen-portal")) .Values.portals.citizen.customDns.enabled }}
+{{- printf "%s%s" "https://" $host }}
 {{- end }}
 
 {{- define "webUrl" -}}

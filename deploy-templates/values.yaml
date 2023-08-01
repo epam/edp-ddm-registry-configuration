@@ -1098,9 +1098,11 @@ appLabel: registry-configuration
 
 portals:
   citizen:
-    customDns: {}
+    customDns:
+      enabled: false
   officer:
-    customDns: {}
+    customDns:
+      enabled: false
 
 trembitaMock:
   registries:
