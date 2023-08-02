@@ -1,0 +1,45 @@
+{
+  "name":"Call Activity",
+  "id":"callActivity",
+  "appliesTo":[
+    "bpmn:CallActivity"
+  ],
+  "properties":[
+    {
+      "label":"Called Element",
+      "type":"String",
+      "binding":{
+        "type":"property",
+        "name":"calledElement"
+      },
+      "constraints":{
+        "notEmpty":true
+      }
+    },
+    {
+      "label":"Input data",
+      "description":"Input data for Call Activity <br/>Example ${payload)",
+      "type":"String",
+      "binding":{
+        "type":"camunda:in",
+        "target":"inputPayload",
+        "expression": true
+      },
+      "constraints":{
+        "notEmpty":true
+      }
+    },
+    {
+      "label":"Output variable name",
+      "description":"Variable name with Call Activity output payload",
+      "type":"String",
+      "binding":{
+        "type":"camunda:out",
+        "source":"outputPayload"
+      },
+      "constraints":{
+        "notEmpty":true
+      }
+    }
+  ]
+}

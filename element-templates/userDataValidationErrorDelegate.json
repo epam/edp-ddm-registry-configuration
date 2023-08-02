@@ -1,0 +1,27 @@
+{
+  "name": "Throw validation error",
+  "id": "userDataValidationErrorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${userDataValidationErrorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Validation errors",
+	  "description": "Format is { \"field\": \"someField\", \"value\": \"someValue\", \"message\": \"someMessage\"}}",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "validationErrors"
+      }
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "name": "Generate Excerpt",
+  "id": "excerptConnectorGenerateDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${excerptConnectorGenerateDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Excerpt Type",
+      "description": "Excerpt Type",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "excerptType"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Excerpt Input Data",
+      "description": "Map that contains input data for excerpt",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "excerptInputData"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Requires System Signature",
+      "description": "Requires System Signature ('true' or 'false')",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "requiresSystemSignature"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      }
+    },
+    {
+      "label": "X-Digital-Signature source",
+      "description": "Ceph key of the document containing X-Digital-Signature",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_digital_signature_ceph_key"
+      }
+    },
+    {
+      "label": "X-Digital-Signature-Derived source",
+      "description": "Ceph key of document that contains X-Digital-Signature-Derived",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_digital_signature_derived_ceph_key"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "name": "Update entity in data factory",
+  "id": "dataFactoryConnectorUpdateDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${dataFactoryConnectorUpdateDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Resource",
+      "description": "Resource type",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "resource"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Resource id",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "id"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Payload",
+      "description": "Request body",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "payload"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Digital-Signature source",
+      "description": "Ceph key of the document containing X-Digital-Signature<br/>(${sign_submission('signTaskDefinitionId').signatureDocumentId})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_digital_signature_ceph_key"
+      }
+    },
+    {
+      "label": "X-Digital-Signature-Derived source",
+      "description": "Ceph key of document that contains X-Digital-Signature-Derived<br/>(${execution.getVariable(\"secure-sys-var-ref-task-form-data-{taskDefinitionId}\")})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_digital_signature_derived_ceph_key"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

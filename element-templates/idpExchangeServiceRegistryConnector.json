@@ -1,0 +1,65 @@
+{
+  "name": "Idp Exchange Service Registry Connector",
+  "id": "idpExchangeServiceRegistryConnector",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${idpExchangeServiceRegistryConnector}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Url",
+      "description": "Url of the resource. (String)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "url"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Method",
+      "description": "HTTP method. (String)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "method"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Body",
+      "description": "Request body",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "body"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "value": "response",
+      "type": "String",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

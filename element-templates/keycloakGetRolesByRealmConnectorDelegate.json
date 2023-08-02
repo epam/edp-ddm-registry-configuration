@@ -1,0 +1,76 @@
+{
+  "name": "Get Keycloak roles by realm",
+  "id": "keycloakGetRolesByRealmDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetRolesByRealmConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Realm",
+      "description": "Keycloak realm.",
+      "type": "Dropdown",
+      "value": "OFFICER",
+      "choices": [
+        {
+          "name": "OFFICER",
+          "value": "OFFICER"
+        },
+        {
+          "name": "CITIZEN",
+          "value": "CITIZEN"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "realm"
+      }
+    },
+    {
+      "label": "Role Type",
+      "description": "Type of roles.",
+      "type": "Dropdown",
+      "value": "REGISTRY ROLES",
+      "choices": [
+        {
+          "name": "REGISTRY ROLES",
+          "value": "REGISTRY ROLES"
+        },
+        {
+          "name": "PLATFORM ROLES",
+          "value": "PLATFORM ROLES"
+        },
+        {
+          "name": "ALL ROLES",
+          "value": "ALL ROLES"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "roleType"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

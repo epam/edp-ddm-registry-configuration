@@ -1,0 +1,30 @@
+{
+  "name": "Define process excerpt id",
+  "id": "defineProcessExcerptIdDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${defineProcessExcerptIdDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Excerpt id",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "excerptId"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

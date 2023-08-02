@@ -1,0 +1,85 @@
+{
+  "name": "Async Data Load Csv Delegate",
+  "id": "asyncDataLoadDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${asyncDataLoadDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Entity",
+      "description": "Entity name in data model",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "entity"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "File",
+      "description": "File key and checksum",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "file"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Derived file",
+      "description": "Derived file key and checksum",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "derivedFile"
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Digital-Signature source",
+      "description": "Ceph key of the document containing X-Digital-Signature<br/>(${sign_submission('signTaskDefinitionId').signatureDocumentId})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_digital_signature_ceph_key"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "response"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

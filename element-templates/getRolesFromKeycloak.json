@@ -1,0 +1,32 @@
+{
+  "name": "[DEPRECATED] Get roles from keycloak",
+  "id": "getRolesFromKeycloak",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetRolesConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of roles (transient)",
+      "type": "String",
+      "value": "rolesOutput",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ roles }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

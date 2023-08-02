@@ -1,0 +1,43 @@
+{
+  "name": "Remove role from keycloak user",
+  "id": "removeRoleFromKeycloakUser",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakRemoveRoleConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "User name",
+	  "description": "Keycloak user name",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "user_name"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Role",
+      "description": "Keycloak role",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "role"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

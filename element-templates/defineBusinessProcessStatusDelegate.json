@@ -1,0 +1,30 @@
+{
+  "name": "Define business process status",
+  "id": "defineBusinessProcessStatusDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${defineBusinessProcessStatusDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Status",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "status"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

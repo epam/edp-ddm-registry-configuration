@@ -1,0 +1,76 @@
+{
+  "name": "Create Keycloak officer user",
+  "id": "keycloakCreateOfficerUserConnectorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakCreateOfficerUserDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Full name",
+      "description": "Keycloak fullName attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "fullName"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Drfo",
+      "description": "Keycloak drfo attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "drfo"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Edrpou",
+      "description": "Keycloak edrpou attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "edrpou"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Attributes",
+      "description": "Map of keycloak user attributes (has to be map)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributes"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "keycloakUserName",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ userNameResponse }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

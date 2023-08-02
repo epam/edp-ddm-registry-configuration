@@ -1,0 +1,67 @@
+{
+  "name": "Search for entities in another registry data factory",
+  "id": "registryDataFactoryConnectorSearchDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${registryDataFactoryConnectorSearchDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Target registry",
+      "description": "Name of the target registry",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "registry"
+      }
+    },
+    {
+      "label": "Resource",
+      "description": "Resource type (string with name of the resource)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "resource"
+      }
+    },
+    {
+      "label": "Search variables",
+      "description": "Map of search variables (has to be map)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "searchConditions"
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      }
+    }
+  ]
+}

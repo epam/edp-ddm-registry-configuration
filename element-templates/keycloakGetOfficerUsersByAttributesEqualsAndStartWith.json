@@ -1,0 +1,50 @@
+{
+  "name": "[DEPRECATED] Get officer users from Keycloak by attributes (inverse start with, equals) ",
+  "id": "keycloakGetOfficerUsersByAttributesEqualsAndStartWith",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetOfficerUsersByAttributesEqualsAndStartWith}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Attributes Equals",
+      "description": "Map of the attributes for search, structure example: {'name': 'value'}",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributesEquals"
+      }
+    },
+    {
+      "label": "Attributes Inverse Start With",
+      "description": "Map of the attributes for search by inverse start with, structure example: {name: [value1, value2]}.<br/>How inverse start with works: inputAttributes.startsWith(attributeInKeycloak)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributesStartWith"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of users",
+      "type": "String",
+      "value": "usersByAttributes",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersByAttribute }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

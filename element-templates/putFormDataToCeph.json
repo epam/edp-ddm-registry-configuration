@@ -1,0 +1,43 @@
+{
+  "name": "[DEPRECATED] Put user task form data prepopulation to Ceph",
+  "id": "putFormDataToCephDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${putFormDataToCephDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Task definition key",
+	  "description": "The task definition id to put form data to",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "taskDefinitionKey"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Form data prepopulation",
+      "description": "The form data prepopulation to put",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "formData"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

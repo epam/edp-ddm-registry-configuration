@@ -1,0 +1,72 @@
+{
+  "name": "[DEPRECATED] Connect to external system",
+  "id": "externalSystemConnectorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${externalSystemConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "External system name",
+      "description": "Name of the target external system",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "systemName"
+      }
+    },
+    {
+      "label": "External system method name",
+      "description": "Name of the target external system method",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "methodName"
+      }
+    },
+    {
+      "label": "Request parameters",
+      "description": "Map of request parameters (has to be map, value can be multivalue separated by comma)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "requestParameters"
+      }
+    },
+    {
+      "label": "Additional request headers",
+      "description": "Map of request headers (has to be map, value can be multivalue separated by comma)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "requestHeaders"
+      }
+    },
+    {
+      "label": "Request payload",
+      "description": "Request body payload",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "payload"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      }
+    }
+  ]
+}

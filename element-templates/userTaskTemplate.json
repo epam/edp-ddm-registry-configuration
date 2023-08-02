@@ -1,0 +1,63 @@
+{
+  "name": "User form",
+  "id": "formUserTaskTemplate",
+  "appliesTo": [
+    "bpmn:UserTask"
+  ],
+  "properties": [
+    {
+      "label": "Form key",
+      "type": "String",
+      "binding": {
+        "type": "property",
+        "name": "camunda:formKey"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Assignee",
+      "value": "${initiator}",
+      "type": "String",
+      "binding": {
+        "type": "property",
+        "name": "camunda:assignee"
+      }
+    },
+    {
+      "label": "Candidate users",
+      "type": "String",
+      "binding": {
+        "type": "property",
+        "name": "camunda:candidateUsers"
+      }
+    },
+    {
+      "label": "Candidate roles",
+      "type": "String",
+      "binding": {
+        "type": "property",
+        "name": "camunda:candidateGroups"
+      }
+    },
+    {
+      "label": "Form data pre-population",
+      "description": "Value of the form data that will be pre-populated on user form<br/>e.g. ${formData} where formData is a variable with Spin JSON document of form ( S(map, 'application/json') )",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "userTaskInputFormDataPrepopulate"
+      }
+    },
+    {
+      "label": "Form variables",
+      "description": "Form variables that will be accessed by the form",
+      "type": "String",
+      "binding": {
+        "type": "camunda:property",
+        "name": "formVariables"
+      }
+    }
+  ]
+}

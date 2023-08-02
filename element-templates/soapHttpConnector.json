@@ -1,0 +1,73 @@
+{
+  "name": "SOAP http connector",
+  "id": "soapHttpConnector",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [],
+  "scopes": [
+    {
+      "type": "camunda:Connector",
+      "properties": [
+        {
+          "label": "ConnectorId",
+          "type": "Hidden",
+          "value": "soap-http-connector",
+          "binding": {
+            "type": "property",
+            "name": "connectorId"
+          }
+        },
+        {
+          "label": "Url",
+          "description": "Url of the resource.",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "url"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Headers",
+          "description": "Request headers.<br/>[Content-Type, SOAPAction]",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "headers"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Payload",
+          "description": "Request body.",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "payload"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Result variable",
+          "description": "The process variable to put response to. A string in XML format.",
+          "type": "String",
+          "value": "response",
+          "binding": {
+            "type": "camunda:outputParameter",
+            "source": "${response}"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        }
+      ]
+    }
+  ]
+}

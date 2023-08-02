@@ -1,0 +1,96 @@
+{
+  "name": "Search registry users by attributes",
+  "id": "searchRegistryUsersByAttributes",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${searchRegistryUsersByAttributes}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Realm",
+      "description": "Realm where it's needed to search users",
+      "type": "Dropdown",
+      "choices": [
+        {
+          "name": "OFFICER",
+          "value": "officer"
+        },
+        {
+          "name": "CITIZEN",
+          "value": "citizen"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "realm"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Attributes Equals",
+      "description": "Map of the attributes for exact match search",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributesEquals"
+      }
+    },
+    {
+      "label": "Attributes Starts With",
+      "description": "Map of the attributes for starts with search",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributesStartWith"
+      }
+    },
+    {
+      "label": "Attributes that are start for",
+      "description": "Map containing attributes user must have start for (former inversive starts with). Works like starts with but with switched parameters. For example: input value of some attribute is 'level80' and user to be found has to contain that attribute with value that is a start for it e.g. 'l', 'level', 'level8', 'level80' (user with 'level801' won't be returned as this whole value isn't a start for 'level80'). ",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributesThatAreStartFor"
+      }
+    },
+    {
+      "label": "Limit",
+      "description": "How many users have to been found. If not set or <= 0 then will return whole user list. It's recommended to use for search for users in citizen realm",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "limit"
+      }
+    },
+    {
+      "label": "Continue token",
+      "description": "Token that points at the start of the page. Every users response from this extension will have continueToken point to the next page that has to be used here. On the last page it will return -1 as continueToken.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "continueToken"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the users response",
+      "type": "String",
+      "value": "usersResponse",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersResponse }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

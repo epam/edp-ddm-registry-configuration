@@ -1,0 +1,28 @@
+{
+  "name": "Throw system error",
+  "id": "camundaSystemErrorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${camundaSystemErrorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Message",
+	  "description": "Detailed message",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "systemError"
+      }
+    }
+  ]
+}

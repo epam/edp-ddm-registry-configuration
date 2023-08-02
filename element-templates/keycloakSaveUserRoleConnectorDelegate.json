@@ -1,0 +1,83 @@
+{
+  "name": "Save user roles",
+  "id": "keycloakSaveUserRolesDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakSaveUserRoleConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Username",
+      "description": "Keycloak username.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "username"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Realm",
+      "description": "Keycloak realm.",
+      "type": "Dropdown",
+      "value": "OFFICER",
+      "choices": [
+        {
+          "name": "OFFICER",
+          "value": "OFFICER"
+        },
+        {
+          "name": "CITIZEN",
+          "value": "CITIZEN"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "realm"
+      }
+    },
+    {
+      "label": "Role Type",
+      "description": "Type of roles.",
+      "type": "Dropdown",
+      "value": "REGISTRY ROLES",
+      "choices": [
+        {
+          "name": "REGISTRY ROLES",
+          "value": "REGISTRY ROLES"
+        },
+        {
+          "name": "PLATFORM ROLES",
+          "value": "PLATFORM ROLES"
+        },
+        {
+          "name": "ALL ROLES",
+          "value": "ALL ROLES"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "roleType"
+      }
+    },
+    {
+      "label": "Roles",
+      "description": "List of keycloak roles (has to be list)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "roles"
+      }
+    }
+  ]
+}

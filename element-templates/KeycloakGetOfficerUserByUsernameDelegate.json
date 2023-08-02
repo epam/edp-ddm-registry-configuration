@@ -1,0 +1,44 @@
+{
+  "name": "Get officer user by username",
+  "id": "keycloakGetOfficerUserByUsernameDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetOfficerUserByUsernameDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Username (required)",
+      "description": "",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "username"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the user",
+      "type": "String",
+      "value": "userByUsername",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ userByUsername }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

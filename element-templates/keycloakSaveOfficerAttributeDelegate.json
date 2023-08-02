@@ -1,0 +1,55 @@
+{
+  "name": "[DEPRECATED] Save Officer Attribute To Keycloak",
+  "id": "keycloakSaveOfficerAttributeDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakSaveOfficerAttributeDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Username",
+      "description": "Keycloak username.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "username"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Attribute Name",
+      "description": "Attribute name to add.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributeName"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Attribute Values",
+      "description": "Attribute Values must be presented as list",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributeValue"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

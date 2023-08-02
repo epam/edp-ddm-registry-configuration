@@ -1,0 +1,44 @@
+{
+   "name":"[DEPRECATED] System digital signature",
+   "id":"systemDigitalSignatureCallActivity",
+   "appliesTo":[
+      "bpmn:CallActivity"
+   ],
+   "properties":[
+      {
+         "label":"Called Process",
+         "type":"Hidden",
+         "editable":false,
+         "value":"system-signature-bp",
+         "binding":{
+            "type":"property",
+            "name":"calledElement"
+         }
+      },
+      {
+         "label":"Input data",
+         "description":"Input data to sign <br/>${payload)",
+         "type":"String",
+         "binding":{
+            "type":"camunda:in",
+            "target":"dataToSign",
+            "expression": true
+         },
+         "constraints":{
+            "notEmpty":true
+         }
+      },
+      {
+         "label":"Output variable name",
+         "description":"Variable name with system signature key",
+         "type":"String",
+         "binding":{
+            "type":"camunda:out",
+            "source":"system_signature_ceph_key"
+         },
+         "constraints":{
+            "notEmpty":true
+         }
+      }
+   ]
+}

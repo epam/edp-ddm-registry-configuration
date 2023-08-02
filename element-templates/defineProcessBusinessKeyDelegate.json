@@ -1,0 +1,30 @@
+{
+  "name": "Define process business key",
+  "id": "defineProcessBusinessKeyDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${defineProcessBusinessKeyDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Business key",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "businessKey"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

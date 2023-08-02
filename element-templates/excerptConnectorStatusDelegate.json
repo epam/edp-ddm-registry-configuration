@@ -1,0 +1,53 @@
+{
+  "name": "Get Excerpt Status",
+  "id": "excerptConnectorStatusDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${excerptConnectorStatusDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Excerpt Identifier",
+      "description": "An excerpt ID",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "excerptIdentifier"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

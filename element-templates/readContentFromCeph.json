@@ -1,0 +1,44 @@
+{
+  "name": "[DEPRECATED] Read content from Ceph",
+  "id": "getContentFromCephDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${getContentFromCephDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Ceph key",
+	  "description": "Ceph document id",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "key"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put content to (transient)",
+      "type": "String",
+      "value": "content",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ content }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

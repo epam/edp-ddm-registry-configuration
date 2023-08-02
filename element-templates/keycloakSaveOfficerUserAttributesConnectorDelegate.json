@@ -1,0 +1,66 @@
+{
+  "name": "Save officer user attributes to Keycloak",
+  "id": "keycloakSaveOfficerUserAttributesDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakSaveOfficerUserAttributesDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Username",
+      "description": "Keycloak username.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "username"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Full name",
+      "description": "Keycloak fullName attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "fullName"
+      }
+    },
+    {
+      "label": "Drfo",
+      "description": "Keycloak drfo attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "drfo"
+      }
+    },
+    {
+      "label": "Edrpou",
+      "description": "Keycloak edrpou attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "edrpou"
+      }
+    },
+    {
+      "label": "Attributes",
+      "description": "Map of keycloak user attributes (has to be map)",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributes"
+      }
+    }
+  ]
+}

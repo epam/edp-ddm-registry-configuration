@@ -1,0 +1,54 @@
+{
+   "name":"Check excerpt status",
+   "id":"checkExcerptStatusCallActivity",
+   "appliesTo":[
+      "bpmn:CallActivity"
+   ],
+   "properties":[
+      {
+         "label":"Called Process",
+         "type":"Hidden",
+         "editable":false,
+         "value":"check-excerpt-status",
+         "binding":{
+            "type":"property",
+            "name":"calledElement"
+         }
+      },
+      {
+         "label":"Asynchronous Before",
+         "type":"Hidden",
+         "value":true,
+         "editable":false,
+         "binding":{
+            "type":"property",
+            "name":"camunda:asyncBefore"
+         }
+      },
+      {
+         "label":"Input excerpt identifier",
+         "description":"Input excerpt identifier value <br/>${excerptIdentifier)",
+         "type":"String",
+         "binding":{
+            "type":"camunda:in",
+            "target":"excerptIdentifier",
+            "expression":true
+         },
+         "constraints":{
+            "notEmpty":true
+         }
+      },
+      {
+         "label":"Output variable name",
+         "description":"Variable name with excerpt status",
+         "type":"String",
+         "binding":{
+            "type":"camunda:out",
+            "source":"excerptStatus"
+         },
+         "constraints":{
+            "notEmpty":true
+         }
+      }
+   ]
+}

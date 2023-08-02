@@ -1,0 +1,50 @@
+{
+  "name": "[DEPRECATED] Get citizen users by attributes from keycloak",
+  "id": "keycloakGetCitizenUsersByAttributesConnectorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetCitizenUsersByAttributesConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Edrpou attribute value",
+      "description": "Keycloak edrpou attribute value. Don't participate in filtration if not specified.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "edrpou"
+      }
+    },
+    {
+      "label": "Drfo attribute value",
+      "description": "Keycloak drfo attribute value. Don't participate in filtration if not specified.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "drfo"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of users",
+      "type": "String",
+      "value": "usersByAttributes",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersByAttribute }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "[DEPRECATED] Get extended officer users by attributes from keycloak",
+  "id": "keycloakGetExtendedOfficerUsersByAttributesConnectorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetExtendedOfficerUsersByAttributesConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Attributes (required)",
+      "description": "Map of the attributes for search, structure example: {'name': 'value'}",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "attributes"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of users",
+      "type": "String",
+      "value": "usersByAttributes",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersByAttribute }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

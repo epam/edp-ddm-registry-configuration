@@ -1,0 +1,65 @@
+{
+  "name": "Batch Read entities from data factory",
+  "id": "dataFactoryConnectorBatchReadDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${dataFactoryConnectorBatchReadDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Resource",
+      "description": "Resource type",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "resource"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Resource ids",
+	  "description": "Array that contains resource ids",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "resourceIds"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Access-Token",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put response to (transient)",
+      "type": "String",
+      "value": "response",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ response }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

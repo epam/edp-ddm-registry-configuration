@@ -1,0 +1,88 @@
+{
+  "$schema": "https://unpkg.com/@camunda/element-templates-json-schema/resources/schema.json",
+  "name": "Send User Notification",
+  "id": "sendUserNotification",
+  "appliesTo": [
+    "bpmn:SendTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${sendUserNotificationDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Recipient",
+      "description": "Notification recipient username <br/>(${initiator().userName or completer('taskDefinitionId').userName})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationRecipient"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Realm",
+      "description": "Keycloak realm",
+      "type": "Dropdown",
+      "value": "citizen",
+      "choices": [
+        {
+          "name": "OFFICER",
+          "value": "officer"
+        },
+        {
+          "name": "CITIZEN",
+          "value": "citizen"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationRecipientRealm"
+      }
+    },
+    {
+      "label": "Subject",
+      "description": "Notification subject",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationSubject"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Notification message template",
+      "description": "Notification message template <br/>(<registry-regulation>/notifications/<channel>/<template_name>/*.*)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationTemplate"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Notification template model",
+      "description": "Notification template model <br/>(${templateModel} variable to be used for template processing)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationTemplateModel"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

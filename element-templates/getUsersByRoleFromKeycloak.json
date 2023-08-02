@@ -1,0 +1,41 @@
+{
+  "name": "Get users by role from keycloak",
+  "id": "getUsersByRoleFromKeycloak",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetUsersConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Role name (Optional)",
+	  "description": "Keycloak role name. If not specified, defaults to 'officer'",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "role_name"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of users (transient)",
+      "type": "String",
+      "value": "usersOutput",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersByRole }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

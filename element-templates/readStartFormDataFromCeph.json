@@ -1,0 +1,32 @@
+{
+  "name": "[DEPRECATED] Read start form data from Ceph",
+  "id": "getStartFormDataFromCephDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${getStartFormDataFromCephDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put form data to (transient)",
+      "type": "String",
+      "value": "startFormData",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ formData }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

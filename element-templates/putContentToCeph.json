@@ -1,0 +1,43 @@
+{
+  "name": "[DEPRECATED] Put content to Ceph",
+  "id": "putContentToCephDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${putContentToCephDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Ceph key",
+	  "description": "Ceph document id",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "key"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Content",
+      "description": "Ceph document",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "content"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

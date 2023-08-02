@@ -1,0 +1,53 @@
+{
+  "name": "[DEPRECATED] Get users by attributes from keycloak",
+  "id": "keycloakGetOfficerUsersByAttributesConnectorDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${keycloakGetOfficerUsersByAttributesConnectorDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Edrpou attribute value (required)",
+      "description": "Keycloak edrpou attribute value.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "edrpou"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Drfo attribute value (optional)",
+      "description": "Keycloak drfo attribute value. Don't participate in filtration if not specified.",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "drfo"
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put the list of users",
+      "type": "String",
+      "value": "usersByAttributes",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ usersByAttribute }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

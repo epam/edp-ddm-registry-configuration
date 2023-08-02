@@ -1,0 +1,55 @@
+{
+  "name": "System signature by DSO service",
+  "id": "digitalSystemSignatureDelegate",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${digitalSystemSignatureDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Payload",
+      "description": "Request body",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "payload"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "X-Access-Token source",
+      "description": "Access token of the user<br/>(${initiator().accessToken or completer('taskDefinitionId').accessToken})",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "x_access_token"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result variable",
+      "description": "The process variable to put generated storage key to (transient)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:outputParameter",
+        "source": "${ system_signature_storage_key }"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}
