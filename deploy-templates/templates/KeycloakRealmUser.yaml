@@ -3,7 +3,7 @@
 {{- if $realmValue.realmUsers }}
 {{- range $userKey, $userValue := $realmValue.realmUsers }}
 ---
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakRealmUser
 metadata:
   annotations:

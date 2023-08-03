@@ -1,7 +1,7 @@
 {{- $root := .Values }}
 {{- range $realmGroup := .Values.keycloak.realmGroups }}
 ---
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakRealmGroup
 metadata:
   name: {{ $realmGroup.name }}

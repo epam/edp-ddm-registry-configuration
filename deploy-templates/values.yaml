@@ -785,15 +785,6 @@ keycloak:
     adminPortal:
       name: admin
       keycloakOwner: main
-      providerName: "ddm-user-storage-provider"
-      providerId: "ddm-user-storage-provider"
-      providerType: "org.keycloak.storage.UserStorageProvider"
-      providerEnabled: "[\"false\"]"
-      providerPriority: "[\"0\"]"
-      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
-      providerVaultRole: "[\"sa-role\"]"
-      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
-      providerCachePolicy: "[\"DEFAULT\"]"
       ssoRealm:
         enabled: true
         autoRedirectEnabled: false
@@ -804,15 +795,6 @@ keycloak:
       keycloakOwner: main
       browserFlow: dso-citizen-auth-flow
       loginTheme: dso-citizen-login-theme
-      providerName: "ddm-user-storage-provider"
-      providerId: "ddm-user-storage-provider"
-      providerType: "org.keycloak.storage.UserStorageProvider"
-      providerEnabled: "[\"false\"]"
-      providerPriority: "[\"0\"]"
-      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
-      providerVaultRole: "[\"sa-role\"]"
-      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
-      providerCachePolicy: "[\"DEFAULT\"]"
       ssoRealm:
         enabled: false
 
@@ -829,15 +811,6 @@ keycloak:
       keycloakOwner: main
       browserFlow: dso-officer-auth-flow
       loginTheme: dso-officer-login-theme
-      providerName: "ddm-user-storage-provider"
-      providerId: "ddm-user-storage-provider"
-      providerType: "org.keycloak.storage.UserStorageProvider"
-      providerEnabled: "[\"false\"]"
-      providerPriority: "[\"0\"]"
-      providerVaultHost: "[\"http://hashicorp-vault.user-management.svc:8200\"]"
-      providerVaultRole: "[\"sa-role\"]"
-      providerVaultTokenFile: "[\"/var/run/secrets/kubernetes.io/serviceaccount/token\"]"
-      providerCachePolicy: "[\"DEFAULT\"]"
       ssoRealm:
         enabled: true
         autoRedirectEnabled: false

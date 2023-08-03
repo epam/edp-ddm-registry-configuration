@@ -1,6 +1,6 @@
-{{- $authflow := (lookup "v1.edp.epam.com/v1alpha1" "KeycloakAuthFlow" .Release.Namespace "citizen-portal-dso-citizen-auth-flow") -}}
+{{- $authflow := (lookup "v1.edp.epam.com/v1" "KeycloakAuthFlow" .Release.Namespace "citizen-portal-dso-citizen-auth-flow") -}}
 {{- $authFlowSpec := .Values.keycloak.citizenAuthFlow }}
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakAuthFlow
 metadata:
   name: {{ $authFlowSpec.name }}

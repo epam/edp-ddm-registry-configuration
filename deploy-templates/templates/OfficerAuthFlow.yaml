@@ -1,6 +1,6 @@
 {{- if eq .Values.keycloak.realms.officerPortal.browserFlow "dso-officer-auth-flow" }}
 {{- $root := .Values }}
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakAuthFlow
 metadata:
   name: {{ $root.keycloak.authFlows.officerAuthFlow.name }}

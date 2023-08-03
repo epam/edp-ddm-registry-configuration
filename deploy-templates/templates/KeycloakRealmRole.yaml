@@ -1,7 +1,7 @@
 {{- $root := .Values }}
 {{- range $realmRole := .Values.keycloak.realmRoles }}
 ---
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakRealmRole
 metadata:
   name: {{ $realmRole.name }}

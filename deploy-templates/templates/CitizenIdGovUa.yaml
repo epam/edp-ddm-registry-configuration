@@ -10,7 +10,7 @@
   {{- end }}
 
   {{- define "keycloak.url" -}}
-  {{- printf "%s%s" "https://" .Values.keycloak.host }}
+  {{- printf "%s%s/%s" "https://" .Values.keycloak.host "auth" }}
   {{- end -}}
 
 ---
@@ -29,7 +29,7 @@ type: Opaque
 data:
   clientSecret: {{ $secretValue | squote }}
 ---
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakClient
 metadata:
   name: {{ .Release.Namespace }}-citizen-portal
@@ -103,7 +103,7 @@ spec:
       protocol: openid-connect
       protocolMapper: oidc-hardcoded-claim-mapper
 ---
-apiVersion: v1.edp.epam.com/v1alpha1
+apiVersion: v1.edp.epam.com/v1
 kind: KeycloakRealmIdentityProvider
 metadata:
   name: citizen-id-gov-ua
@@ -123,11 +123,11 @@ spec:
     backchannelSupported: "true"
     clientSecret: {{ $secretValue | b64dec }}
     clientAuthMethod: "client_secret_post"
-    authorizationUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/auth
-    userInfoUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/userinfo
-    tokenUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/token
-    logoutUrl: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua/protocol/openid-connect/logout
-    issuer: {{ template "keycloak.url" . }}/auth/realms/id-gov-ua
+    authorizationUrl: {{ template "keycloak.url" . }}/realms/id-gov-ua/protocol/openid-connect/auth
+    userInfoUrl: {{ template "keycloak.url" . }}/realms/id-gov-ua/protocol/openid-connect/userinfo
+    tokenUrl: {{ template "keycloak.url" . }}/realms/id-gov-ua/protocol/openid-connect/token
+    logoutUrl: {{ template "keycloak.url" . }}/realms/id-gov-ua/protocol/openid-connect/logout
+    issuer: {{ template "keycloak.url" . }}/realms/id-gov-ua
   mappers:
     - identityProviderMapper: "oidc-user-attribute-idp-mapper"
       name: "drfo"
