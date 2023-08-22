@@ -24,7 +24,8 @@
         "name": "resource"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "table.rest-api-name"
       }
     },
     {

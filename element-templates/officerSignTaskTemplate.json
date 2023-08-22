@@ -13,7 +13,8 @@
         "name": "camunda:formKey"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "form.name"
       }
     },
     {

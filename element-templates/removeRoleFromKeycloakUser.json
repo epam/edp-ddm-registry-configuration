@@ -36,7 +36,8 @@
         "name": "role"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "role.name"
       }
     }
   ]

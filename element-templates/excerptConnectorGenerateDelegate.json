@@ -24,7 +24,8 @@
         "name": "excerptType"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "excerpt.name"
       }
     },
     {

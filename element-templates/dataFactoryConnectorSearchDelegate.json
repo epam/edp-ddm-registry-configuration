@@ -22,6 +22,10 @@
       "binding": {
         "type": "camunda:inputParameter",
         "name": "resource"
+      },
+      "constraints": {
+        "notEmpty": true,
+        "type": "table.rest-api-name"
       }
     },
     {

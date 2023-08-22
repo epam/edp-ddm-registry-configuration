@@ -57,7 +57,8 @@
         "name": "notificationTemplate"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "notification.template.name"
       }
     },
     {
