@@ -15,7 +15,7 @@ metadata:
     konghq.com/preserve-host: 'false'
     konghq.com/protocols: 'http'
     konghq.com/strip-path: 'false'
-    konghq.com/methods: GET
+    konghq.com/methods: GET,POST
   name: platform-gateway-{{ $publicEndpoints.name }}
 spec:
   ingressClassName: kong
