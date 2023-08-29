@@ -1,0 +1,81 @@
+{
+  "$schema": "https://unpkg.com/@camunda/element-templates-json-schema/resources/schema.json",
+  "name": "Send User Notification by Address",
+  "id": "sendUserNotificationByAddress",
+  "appliesTo": [
+    "bpmn:SendTask"
+  ],
+  "properties": [
+    {
+      "label": "Implementation Type",
+      "type": "Hidden",
+      "value": "${sendUserNotificationByAddressDelegate}",
+      "editable": false,
+      "binding": {
+        "type": "property",
+        "name": "camunda:delegateExpression"
+      }
+    },
+    {
+      "label": "Subject",
+      "description": "Notification subject (optional)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationSubject"
+      }
+    },
+    {
+      "label": "Notification message template",
+      "description": "Notification message template <br/>(<registry-regulation>/notifications/<channel>/<template_name>/*.*)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationTemplate"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Notification template model",
+      "description": "Notification template model <br/>(${templateModel} variable to be used for template processing)",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationTemplateModel"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Notification channel",
+      "description": "Notification channel",
+      "type": "Dropdown",
+      "value": "EMAIL",
+      "choices": [
+        {
+          "name": "EMAIL",
+          "value": "EMAIL"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationChannel"
+      }
+    },
+    {
+      "label": "Notification address",
+      "description": "Notification address",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "notificationAddress"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}
