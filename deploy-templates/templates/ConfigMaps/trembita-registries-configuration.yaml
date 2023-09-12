@@ -15,7 +15,7 @@ data:
           {{ $kIn }}:
             {{- range $kInIn,$vInIn := $vIn }}
               {{- if ne $kInIn "secret" }}
-            {{ $kInIn }}: {{ $vInIn }}
+            {{ $kInIn }}: {{ $vInIn | quote }}
             {{- end -}}
             {{- end -}}
             {{- end -}}
@@ -23,12 +23,12 @@ data:
             {{- if $vIn }}
           {{ $kIn }}:
             {{- range $kInInCS,$vInInCS := $vIn }}
-            {{ $kInInCS }}: {{ $vInInCS }}
+            {{ $kInInCS }}: {{ $vInInCS | quote }}
             {{- end -}}
             {{- end -}}
                 {{- else }}
             {{- if ne $kIn "auth" }}
-          {{ $kIn }}: {{ $vIn }}
+          {{ $kIn }}: {{ $vIn | quote }}
             {{- end -}}
             {{- end -}}
         {{- end -}}

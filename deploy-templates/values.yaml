@@ -853,6 +853,7 @@ keycloak:
             titleFull: ''
             selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
             selfRegistrationDefaultRoles: unregistered-officer
+            individualAccessEnabled: '{{ .Values.portals.officer.individualAccessEnabled }}'
 
     idGovUaOfficerRedirectorFlow:
       name: id-gov-ua-officer-redirector
@@ -895,6 +896,7 @@ keycloak:
             titleFull: ''
             selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
             selfRegistrationDefaultRoles: unregistered-officer
+            individualAccessEnabled: '{{ .Values.portals.officer.individualAccessEnabled }}'
         authcookie:
           name: auth-cookie
           requirement: ALTERNATIVE
@@ -1060,6 +1062,7 @@ portals:
   officer:
     customDns:
       enabled: false
+    individualAccessEnabled: false
 
 trembitaMock:
   registries:

@@ -1,4 +1,3 @@
-{{- if eq .Values.keycloak.realms.officerPortal.browserFlow "dso-officer-auth-flow" }}
 {{- $root := .Values }}
 apiVersion: v1.edp.epam.com/v1
 kind: KeycloakAuthFlow
@@ -29,4 +28,3 @@ spec:
   providerId: {{ $root.keycloak.authFlows.officerAuthFlow.providerId }}
   realm: {{ $root.keycloak.authFlows.officerAuthFlow.realm }}
   topLevel: {{ $root.keycloak.authFlows.officerAuthFlow.topLevel }}
-{{- end }}

@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-sidecars-{{ .Values.namespace }}
+  namespace: openshift-monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  podMetricsEndpoints:
+    - path: /stats/prometheus
+      port: http-envoy-prom
+  selector:
+    matchLabels:
+      security.istio.io/tlsMode: istio

@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-ingressgateway-{{ .Values.namespace }}
+  namespace: openshift-monitoring
+spec:
+  endpoints:
+    - path: /stats/prometheus
+      targetPort: http-envoy-prom
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  selector:
+    matchLabels:
+      app: istio-ingressgateway

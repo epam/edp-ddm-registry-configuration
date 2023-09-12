@@ -65,8 +65,28 @@
       }
     },
     {
+      "label": "Response type",
+      "description": "Result variable type",
+      "type": "Dropdown",
+      "value": "xml",
+      "choices": [
+        {
+          "name": "XML",
+          "value": "xml"
+        },
+        {
+          "name": "STRING",
+          "value": "string"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "responseType"
+      }
+    },
+    {
       "label": "Result variable",
-      "description": "The process variable to put response to (transient)",
+      "description": "The process variable to put response to",
       "type": "String",
       "value": "xmlElementResponse",
       "binding": {
