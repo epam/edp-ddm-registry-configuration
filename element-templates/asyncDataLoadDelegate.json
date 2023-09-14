@@ -24,7 +24,8 @@
         "name": "entity"
       },
       "constraints": {
-        "notEmpty": true
+        "notEmpty": true,
+        "type": "async-load.rest-api-name"
       }
     },
     {

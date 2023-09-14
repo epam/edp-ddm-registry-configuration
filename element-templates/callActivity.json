@@ -12,8 +12,9 @@
         "type":"property",
         "name":"calledElement"
       },
-      "constraints":{
-        "notEmpty":true
+      "constraints": {
+        "notEmpty": true,
+        "type": "process.id"
       }
     },
     {

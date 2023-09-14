@@ -22,6 +22,9 @@
       "binding": {
         "type": "camunda:inputParameter",
         "name": "role_name"
+      },
+      "constraints": {
+        "type": "role.name"
       }
     },
     {
