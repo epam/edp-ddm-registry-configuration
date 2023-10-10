@@ -1,0 +1,14 @@
+{{- $configMap := (lookup "v1" "ConfigMap" .Release.Namespace "registry-logos") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-logos
+{{- if $configMap }}
+binaryData:
+  {{ $configMap.binaryData | toYaml | nindent 2 }}
+{{- else }}
+binaryData:
+  header-logo.svg: '{{ include "assets.logoHeader" . }}'
+  loader-logo.svg: '{{ include "assets.logoLoader" . }}'
+  favicon.png: '{{ include "assets.logoFavicon" . }}'
+{{- end }}

@@ -46,9 +46,6 @@
       "binding": {
         "type": "camunda:inputParameter",
         "name": "edrpou"
-      },
-      "constraints": {
-        "notEmpty": true
       }
     },
     {

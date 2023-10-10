@@ -1,4 +1,5 @@
 {{- $root := .Values }}
+{{- $authflow := (lookup "v1.edp.epam.com/v1" "KeycloakAuthFlow" .Release.Namespace $root.keycloak.authFlows.officerAuthFlow.name) -}}
 apiVersion: v1.edp.epam.com/v1
 kind: KeycloakAuthFlow
 metadata:
@@ -19,8 +20,17 @@ spec:
       alias: {{ $authenticator.name }}-configuration
       config:
           {{- range $key,$value :=  $authenticator.authenticatorConfig }}
+          {{- if and $authflow (has $key (list "theme" "title" "titleFull" "supportChannelUrl")) }}
+            {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
+            {{- if (index $ae.authenticatorConfig.config $key) }}
+            {{ $key }}: {{ index $ae.authenticatorConfig.config $key }}
+            {{- else }}
             {{ $key }}: {{ tpl $value $ | squote }}
-        {{- end }}
+            {{- end }}
+          {{- else }}
+            {{ $key }}: {{ tpl $value $ | squote }}
+          {{- end }}
+          {{- end }}
             widgetHeight: {{ $root.keycloak.authFlows.officerAuthFlow.widgetHeight | squote }}
     {{- end }}
   {{- end }}

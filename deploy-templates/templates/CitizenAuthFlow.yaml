@@ -26,15 +26,24 @@ spec:
           edrCheck: '{{ $authFlowSpec.edrCheck }}'
           authType: '{{ $authFlowSpec.authType }}'
           entrepreneurDefaultRoles: citizen;unregistered-entrepreneur;
+          logoHeader: '{{ include "assets.logoHeader" . }}'
+          logoLoader: '{{ include "assets.logoLoader" . }}'
+          logoFavicon: '{{ include "assets.logoFavicon" . }}'
           {{- if $authflow }}
           {{- $ae := index $authflow.spec.authenticationExecutions 1 }}
           themeFile: {{ $ae.authenticatorConfig.config.themeFile }}
           title: {{ $ae.authenticatorConfig.config.title }}
           titleFull: {{ $ae.authenticatorConfig.config.titleFull }}
+          {{- if $ae.authenticatorConfig.config.supportChannelUrl }}
+          supportChannelUrl: {{ $ae.authenticatorConfig.config.supportChannelUrl }}
+          {{- else }}
+          supportChannelUrl: ''
+          {{- end }}
           {{- else }}
           themeFile: white-theme.js
           title: ''
           titleFull: ''
+          supportChannelUrl: ''
           {{- end }}
           esignHintUrl: https://diia.gov.ua/faq/1
           legalDefaultRoles: citizen;unregistered-legal;

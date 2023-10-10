@@ -12,6 +12,7 @@ metadata:
     {{- else }}
     konghq.com/plugins: public-endpoints-prometheus
     {{- end }}
+    konghq.com/regex-prefix: /~
     konghq.com/preserve-host: 'false'
     konghq.com/protocols: 'http'
     konghq.com/strip-path: 'false'
@@ -23,8 +24,8 @@ spec:
     - host: platform-gateway-{{ $root.stageName }}.{{ $root.dnsWildcard }}
       http:
         paths:
-          - path: /api/public/data-factory{{ $publicEndpoints.url }}
-            pathType: Exact
+          - path: /~/api/public/data-factory{{ $publicEndpoints.url }}
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: platform-gateway-public-api

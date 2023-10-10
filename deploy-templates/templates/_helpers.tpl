@@ -98,3 +98,34 @@ haproxy.router.openshift.io/ip_whitelist: {{ (include "admin-routes.whitelist.ci
 {{- define "trembita-edr-registry-mock-url" -}}
 {{- printf "%s%s.%s" "https://" (index .Values.trembitaMock.registries "edr-registry").name .Values.dnsWildcard }}
 {{- end }}
+
+{{- define "codebases.release.name" }}
+{{- ternary "codebases" "codebase-operator" (eq .Values.edpProject "control-plane") }}
+{{- end }}
+
+{{- define "assets.logoHeader" -}}
+{{- $configmap := (lookup "v1" "ConfigMap" .Release.Namespace "registry-logos") -}}
+{{- if $configmap -}}
+{{- index $configmap.binaryData "header-logo.svg" -}}
+{{- else -}}
+{{- .Values.assets.logoHeader }}
+{{- end -}}
+{{- end -}}
+
+{{- define "assets.logoLoader" -}}
+{{- $configmap := (lookup "v1" "ConfigMap" .Release.Namespace "registry-logos") -}}
+{{- if $configmap -}}
+{{- index $configmap.binaryData "loader-logo.svg" -}}
+{{- else -}}
+{{- .Values.assets.logoLoader }}
+{{- end -}}
+{{- end -}}
+
+{{- define "assets.logoFavicon" -}}
+{{- $configmap := (lookup "v1" "ConfigMap" .Release.Namespace "registry-logos") -}}
+{{- if $configmap -}}
+{{- index $configmap.binaryData "favicon.png" -}}
+{{- else -}}
+{{- .Values.assets.logoFavicon }}
+{{- end -}}
+{{- end -}}

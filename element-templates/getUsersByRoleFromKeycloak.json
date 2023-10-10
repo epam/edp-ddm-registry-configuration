@@ -28,6 +28,24 @@
       }
     },
     {
+      "label": "Limit",
+      "description": "How many users have to been found. If not set will return 100 users",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "limit"
+      }
+    },
+    {
+      "label": "Offset",
+      "description": "Number of users to skip before starting to return users",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "offset"
+      }
+    },
+    {
       "label": "Result variable",
       "description": "The process variable to put the list of users (transient)",
       "type": "String",

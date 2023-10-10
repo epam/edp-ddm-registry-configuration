@@ -1,6 +1,6 @@
 {{- range $dataComponent := .Values.dataComponents.codebases }}
 ---
-apiVersion: v2.edp.epam.com/v1alpha1
+apiVersion: v2.edp.epam.com/v1
 kind: CodebaseBranch
 metadata:
   name: {{ $dataComponent.name }}-{{ $dataComponent.codebaseBranch }}

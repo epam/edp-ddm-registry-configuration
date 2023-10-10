@@ -1,4 +1,5 @@
 global:
+  region: ua
   notifications:
     email:
       type: internal
@@ -178,6 +179,35 @@ keycloak:
       webUrl: '{{ template "citizen-portal.url" . }}'
       directAccess: false
       audRequired: false
+      protocolMappersGlobal:
+        - config:
+            access.token.claim: 'true'
+            claim.name: drfo
+            claim.value: '0000000000'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: drfo
+            userinfo.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            id.token.claim.: 'true'
+            access.token.claim: 'true'
+            userinfo.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-custom-fullname-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: roles
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+          name: realm roles
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-realm-role-mapper
       protocolMappers:
         - config:
             jsonType.label: String
@@ -379,6 +409,46 @@ keycloak:
       audRequired: false
       clientRoles:
         - administrator
+      protocolMappersGlobal:
+        - config:
+            access.token.claim: 'true'
+            claim.name: drfo
+            claim.value: '1111111111'
+            id.token.claim: 'true'
+            jsonType.label: String
+            name: drfo
+            userinfo.token.claim: 'true'
+          name: drfo
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            claim.value: '11111111'
+            userinfo.token.claim: 'true'
+            id.token.claim: 'true'
+            access.token.claim: 'true'
+            claim.name: edrpou
+            jsonType.label: String
+            name: edrpou
+          name: edrpou
+          protocol: openid-connect
+          protocolMapper: oidc-hardcoded-claim-mapper
+        - config:
+            id.token.claim.: 'true'
+            access.token.claim: 'true'
+            userinfo.token.claim: 'true'
+          name: fullName
+          protocol: openid-connect
+          protocolMapper: oidc-custom-fullname-mapper
+        - config:
+            access.token.claim: 'true'
+            claim.name: roles
+            id.token.claim: 'true'
+            jsonType.label: String
+            multivalued: 'true'
+            userinfo.token.claim: 'true'
+          name: realm roles
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-realm-role-mapper
       protocolMappers:
         - config:
             jsonType.label: String
@@ -765,6 +835,12 @@ keycloak:
             "attribute.nameformat": "Basic"
             "single": "false"
 
+  realmEventConfig:
+    eventsListeners:
+      - jboss-logging
+      - update-user-event-listener
+      - metrics-listener
+
   realms:
     adminPortal:
       name: admin
@@ -799,10 +875,6 @@ keycloak:
         enabled: true
         autoRedirectEnabled: false
         name: '{{- template "keycloak.registryGroup.name" . -}}'
-      realmEventConfig:
-        eventsListeners:
-          - jboss-logging
-          - update-user-event-listener
 
   authFlows:
     citizenIdGovUaAuthFlow:
@@ -854,6 +926,11 @@ keycloak:
             selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
             selfRegistrationDefaultRoles: unregistered-officer
             individualAccessEnabled: '{{ .Values.portals.officer.individualAccessEnabled }}'
+            singleIdentityEnabled: '{{ .Values.portals.officer.singleIdentityEnabled }}'
+            logoHeader: '{{ template "assets.logoHeader" . }}'
+            logoLoader: '{{ template "assets.logoLoader" . }}'
+            logoFavicon: '{{ template "assets.logoFavicon" . }}'
+            supportChannelUrl: ''
 
     idGovUaOfficerRedirectorFlow:
       name: id-gov-ua-officer-redirector
@@ -897,6 +974,11 @@ keycloak:
             selfRegistrationEnabled: '{{ .Values.keycloak.realms.officerPortal.selfRegistration }}'
             selfRegistrationDefaultRoles: unregistered-officer
             individualAccessEnabled: '{{ .Values.portals.officer.individualAccessEnabled }}'
+            singleIdentityEnabled: '{{ .Values.portals.officer.singleIdentityEnabled }}'
+            logoHeader: '{{ template "assets.logoHeader" . }}'
+            logoLoader: '{{ template "assets.logoLoader" . }}'
+            logoFavicon: '{{ template "assets.logoFavicon" . }}'
+            supportChannelUrl: ''
         authcookie:
           name: auth-cookie
           requirement: ALTERNATIVE
@@ -905,7 +987,12 @@ keycloak:
   citizenAuthFlow:
     name: citizen-portal-dso-citizen-auth-flow
     edrCheck: true
-    authType: widget
+    authType: registry-id-gov-ua
+    registryIdGovUa:
+      url: https://id.gov.ua
+      clientId: some-id
+      clientSecret: vault-link
+      keyName: key
     widget:
       url: https://eu.iit.com.ua/sign-widget/v20200922/
       height: '720'
@@ -1012,6 +1099,13 @@ dataComponents:
       jenkinsAgent: "dataplatform-jenkins-agent"
       jobProvisioner: "registry"
       codebaseBranch: "master"
+    bpWebserviceGateway:
+      name: "bp-webservice-gateway"
+      version: "0.0.1"
+      buildTool: "docker"
+      jenkinsAgent: "dataplatform-jenkins-agent"
+      jobProvisioner: "registry"
+      codebaseBranch: "master"
 
 ceph:
   objectBucketClaims:
@@ -1063,6 +1157,7 @@ portals:
     customDns:
       enabled: false
     individualAccessEnabled: false
+    singleIdentityEnabled: false
 
 trembitaMock:
   registries:
@@ -1137,3 +1232,7 @@ validation:
         - "yandex.kz"
         - "yandex.by"
         - "yandex.com"
+assets:
+  logoHeader: "PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00LjM4NzE4IDQuMzg1ODlMNC4zODU4OSA0LjM4NzE4QzIuNjQwNzQgNi4xMjgzNiAxLjczMjMzIDguMzU2NDMgMS4yNjkxMiAxMS41MTEzQzAuODAxOTU2IDE0LjY5MzEgMC44IDE4LjcxNTkgMC44IDIzLjk5NTZDMC44IDI5LjI3NTQgMC44MDE5NTQgMzMuMjk4MiAxLjI2OTEzIDM2LjQ4MTFDMS43MzIzNCAzOS42MzcxIDIuNjQwODIgNDEuODY3NyA0LjM4NjU0IDQzLjYxMzVMNC4zODcxOCA0My42MTQxQzYuMTI4MzYgNDUuMzU5MyA4LjM1NjQzIDQ2LjI2NzcgMTEuNTExMyA0Ni43MzA5QzE0LjY5MzEgNDcuMTk4IDE4LjcxNTkgNDcuMiAyMy45OTU2IDQ3LjJDMjkuMjc1NCA0Ny4yIDMzLjI5ODIgNDcuMTk4IDM2LjQ4MTEgNDYuNzMwOUMzOS42MzcxIDQ2LjI2NzcgNDEuODY3NyA0NS4zNTkyIDQzLjYxMzUgNDMuNjEzNUM0NS4zNTkzIDQxLjg2NzYgNDYuMjY3NyAzOS42MzkgNDYuNzMwOSAzNi40ODQzQzQ3LjE5OCAzMy4zMDI1IDQ3LjIgMjkuMjc5OCA0Ny4yIDIzLjk5NTZDNDcuMiAxOC43MTE1IDQ3LjE5OCAxNC42ODg4IDQ2LjczMDkgMTEuNTA3QzQ2LjI2NzcgOC4zNTIzMSA0NS4zNTkzIDYuMTIzNjggNDMuNjEzNSA0LjM3NzgzQzQxLjg2NzggMi42MzY0NyAzOS42MzkyIDEuNzMwMTggMzYuNDg0NiAxLjI2ODA3QzMzLjMwMjYgMC44MDE5NDggMjkuMjc5NyAwLjggMjMuOTk1NiAwLjhDMTguNzExNSAwLjggMTQuNjg4OCAwLjgwMTk1OCAxMS41MDgxIDEuMjY5MTJDOC4zNTQ1MSAxLjczMjI5IDYuMTI4NDggMi42NDA2MiA0LjM4NzE4IDQuMzg1ODlaTTQ0LjE3OTEgMy44MTIxNUM0OCA3LjYzMyA0OCAxMy40NzMxIDQ4IDIzLjk5NTZDNDggMzQuNTE4MiA0OCA0MC4zNTgzIDQ0LjE3OTEgNDQuMTc5MUM0MC4zNTgzIDQ4IDM0LjUwOTUgNDggMjMuOTk1NiA0OEMxMy40ODE4IDQ4IDcuNjMzIDQ4IDMuODIwODUgNDQuMTc5MUMwIDQwLjM1ODMgMCAzNC41MDk1IDAgMjMuOTk1NkMwIDEzLjQ4MTggMCA3LjYzMyAzLjgyMDg1IDMuODIwODVDNy42MzMgMCAxMy40NzMxIDAgMjMuOTk1NiAwQzM0LjUxODIgMCA0MC4zNTgzIDAgNDQuMTc5MSAzLjgxMjE1WiIgZmlsbD0iYmxhY2siLz4KPHBhdGggZD0iTTIyLjk4MzMgMzkuMTY1NEMyMS4yODg3IDM3Ljg1NzcgMjAuMDM5IDM1LjkwNjkgMTkuNjM2NSAzMy42MzQ1SDE0LjE3MTVWOS43MzE3NEMxNy4xMTU4IDExLjIxMDkgMTkuMjEyOSAxNC40OTA5IDE5LjQ2NzEgMTcuODc4TDIwLjI5MzIgMjQuNTg3OUwxOS44OTA3IDI0LjUyMzZDMTkuMDAxMSAyNC41MjM2IDE4LjIzODUgMjUuMzU5NyAxOC4yMzg1IDI2LjE5NTdDMTguMjM4NSAyNi45Njc1IDE4LjgzMTYgMjcuNjMyIDE5LjU5NDIgMjcuODAzNUwyMC41ODk3IDI4LjAzOTRDMjIuMjQyIDI0Ljg4OCAyMy4xNzQgMjEuODAxMSAyMy4xNzQgMTguNzU2OUMyMy4xNzQgMTYuMDEyOSAyMi44MTM5IDEzLjI5MDQgMjIuNzcxNSAxMC41MDM1QzIyLjc3MTUgOS4yNjAxMiAyMy4yMzc1IDguMTIzOTMgMjQuMDAwMSA3LjI0NUMyNC43NjI2IDguMTQ1MzcgMjUuMjI4NiA5LjI2MDEyIDI1LjIyODYgMTAuNTAzNUMyNS4yMjg2IDEzLjI5MDQgMjQuODI2MiAxNi4wMzQ0IDI0LjgyNjIgMTguNzU2OUMyNC44MjYyIDIxLjc3OTYgMjUuNzU4MiAyNC44ODggMjcuNDEwNCAyOC4wMzk0TDI4LjQwNiAyNy44MDM1QzI5LjE2ODUgMjcuNjMyIDI5Ljc2MTcgMjYuOTY3NSAyOS43NjE3IDI2LjE5NTdDMjkuNzYxNyAyNS4zNTk3IDI4Ljk5OTEgMjQuNTIzNiAyOC4xMDk0IDI0LjUyMzZMMjcuNzA3IDI0LjU4NzlMMjguNTMzMSAxNy44NzhDMjguOTM1NSAxNC40OTA5IDMwLjg4NDMgMTEuMjEwOSAzMy44Mjg2IDkuNzMxNzRWMzMuNjM0NUgyOC4zNjM2QzI3Ljk2MTIgMzUuODg1NSAyNi43NzUgMzcuOTIyIDI1LjAxNjggMzkuMTY1NEMyNC42MTQ0IDM5LjQ2NTUgMjQuMjU0MyAzOS44MyAyNC4wMjEzIDQwLjMwMTZDMjMuNzQ1OSAzOS44MDg1IDIzLjM4NTggMzkuNDY1NSAyMi45ODMzIDM5LjE2NTRaTTE2Ljc1NTcgMjUuMzgxMUMxNi45ODg3IDI0LjQ4MDcgMTcuNjQ1NCAyMy43MDkgMTguNDUwMyAyMy4yMzc0TDE3Ljc5MzcgMTcuNzA2NUMxNy41NjA3IDE1Ljk5MTUgMTYuODYxNyAxNC40NDggMTUuODAyNSAxMy4xODMyVjI1LjM1OTdIMTYuNzU1N1YyNS4zODExWk0xOS41MzA2IDMxLjk2MjRDMTkuNTMwNiAzMS4xMjY0IDE5LjY1NzcgMzAuMzU0NiAxOS44MjcyIDI5LjU4MjlMMTkuMDY0NiAyOS40MTE0QzE3Ljk0MiAyOS4wNDY5IDE3LjA3MzUgMjguMTY4IDE2Ljc3NjkgMjcuMDMxOEgxNS44NDQ5VjMxLjk2MjRIMTkuNTMwNlpNMjMuMTUyOCAzMS45NjI0QzIzLjE1MjggMzAuOTU0OSAyMi4zOTAyIDMwLjA1NDUgMjEuMzk0NyAyOS45NDczQzIxLjIyNTIgMzAuNTkwNCAyMS4wOTgxIDMxLjI1NSAyMS4wOTgxIDMxLjk2MjRIMjMuMTUyOFpNMjMuMTUyOCAzMy42MzQ1SDIxLjMzMTFDMjEuNjI3NyAzNC45NDIyIDIyLjI2MzEgMzYuMTIxMyAyMy4xNTI4IDM3LjE1MDNWMzMuNjM0NVpNMjUuNzM3IDI4LjQ2ODFDMjUuMDM4IDI3LjE2MDQgMjQuMzgxNCAyNS43ODg0IDIzLjk3ODkgMjQuMzczNUMyMy41NzY0IDI1LjgwOTkgMjIuOTE5OCAyNy4xNjA0IDIyLjIyMDggMjguNDY4MUMyMi45MTk4IDI4LjYzOTYgMjMuNTEyOSAyOS4xMTEyIDIzLjk3ODkgMjkuNjQ3MkMyNC40NDQ5IDI5LjExMTIgMjUuMDM4IDI4LjYzOTYgMjUuNzM3IDI4LjQ2ODFaTTI2Ljg1OTcgMzEuOTYyNEMyNi44NTk3IDMxLjI1NSAyNi43MzI2IDMwLjU5MDQgMjYuNTYzMSAyOS45NDczQzI1LjU2NzYgMzAuMDc1OSAyNC44MDUgMzAuOTU0OSAyNC44MDUgMzEuOTYyNEgyNi44NTk3Wk0yNi42MjY3IDMzLjYzNDVIMjQuODA1VjM3LjE1MDNDMjUuNjk0NyAzNi4xMjEzIDI2LjMzMDEgMzQuOTQyMiAyNi42MjY3IDMzLjYzNDVaTTMyLjE1NTIgMzEuOTYyNFYyNy4wMzE4SDMxLjIyMzJDMzAuOTI2NyAyOC4xNjggMzAuMDU4MiAyOS4wNDY5IDI4LjkzNTUgMjkuNDExNEwyOC4xNzMgMjkuNTgyOUMyOC4zNDI0IDMwLjM1NDYgMjguNDY5NSAzMS4xMjY0IDI4LjQ2OTUgMzEuOTYyNEgzMi4xNTUyWk0zMi4xNTUyIDI1LjM4MTFWMTMuMjA0NkMzMS4wOTYxIDE0LjQ0OCAzMC4zMzM2IDE1Ljk5MTUgMzAuMTY0MSAxNy43Mjc5TDI5LjUwNzUgMjMuMjU4OEMzMC4zMzM2IDIzLjczMDQgMzAuOTY5IDI0LjUwMjIgMzEuMjAyIDI1LjQwMjVIMzIuMTU1MlYyNS4zODExWiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg=="
+  logoLoader: "PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIyLjk4MzMgMzkuMTY1NEMyMS4yODg3IDM3Ljg1NzcgMjAuMDM5IDM1LjkwNjkgMTkuNjM2NSAzMy42MzQ1SDE0LjE3MTVWOS43MzE3NEMxNy4xMTU4IDExLjIxMDkgMTkuMjEyOSAxNC40OTA5IDE5LjQ2NzEgMTcuODc4TDIwLjI5MzIgMjQuNTg3OUwxOS44OTA3IDI0LjUyMzZDMTkuMDAxMSAyNC41MjM2IDE4LjIzODUgMjUuMzU5NyAxOC4yMzg1IDI2LjE5NTdDMTguMjM4NSAyNi45Njc1IDE4LjgzMTYgMjcuNjMyIDE5LjU5NDIgMjcuODAzNUwyMC41ODk3IDI4LjAzOTRDMjIuMjQyIDI0Ljg4OCAyMy4xNzQgMjEuODAxMSAyMy4xNzQgMTguNzU2OUMyMy4xNzQgMTYuMDEyOSAyMi44MTM5IDEzLjI5MDQgMjIuNzcxNSAxMC41MDM1QzIyLjc3MTUgOS4yNjAxMiAyMy4yMzc1IDguMTIzOTMgMjQuMDAwMSA3LjI0NUMyNC43NjI2IDguMTQ1MzcgMjUuMjI4NiA5LjI2MDEyIDI1LjIyODYgMTAuNTAzNUMyNS4yMjg2IDEzLjI5MDQgMjQuODI2MiAxNi4wMzQ0IDI0LjgyNjIgMTguNzU2OUMyNC44MjYyIDIxLjc3OTYgMjUuNzU4MiAyNC44ODggMjcuNDEwNCAyOC4wMzk0TDI4LjQwNiAyNy44MDM1QzI5LjE2ODUgMjcuNjMyIDI5Ljc2MTcgMjYuOTY3NSAyOS43NjE3IDI2LjE5NTdDMjkuNzYxNyAyNS4zNTk3IDI4Ljk5OTEgMjQuNTIzNiAyOC4xMDk0IDI0LjUyMzZMMjcuNzA3IDI0LjU4NzlMMjguNTMzMSAxNy44NzhDMjguOTM1NSAxNC40OTA5IDMwLjg4NDMgMTEuMjEwOSAzMy44Mjg2IDkuNzMxNzRWMzMuNjM0NUgyOC4zNjM2QzI3Ljk2MTIgMzUuODg1NSAyNi43NzUgMzcuOTIyIDI1LjAxNjggMzkuMTY1NEMyNC42MTQ0IDM5LjQ2NTUgMjQuMjU0MyAzOS44MyAyNC4wMjEzIDQwLjMwMTZDMjMuNzQ1OSAzOS44MDg1IDIzLjM4NTggMzkuNDY1NSAyMi45ODMzIDM5LjE2NTRaTTE2Ljc1NTcgMjUuMzgxMUMxNi45ODg3IDI0LjQ4MDcgMTcuNjQ1NCAyMy43MDkgMTguNDUwMyAyMy4yMzc0TDE3Ljc5MzcgMTcuNzA2NUMxNy41NjA3IDE1Ljk5MTUgMTYuODYxNyAxNC40NDggMTUuODAyNSAxMy4xODMyVjI1LjM1OTdIMTYuNzU1N1YyNS4zODExWk0xOS41MzA2IDMxLjk2MjRDMTkuNTMwNiAzMS4xMjY0IDE5LjY1NzcgMzAuMzU0NiAxOS44MjcyIDI5LjU4MjlMMTkuMDY0NiAyOS40MTE0QzE3Ljk0MiAyOS4wNDY5IDE3LjA3MzUgMjguMTY4IDE2Ljc3NjkgMjcuMDMxOEgxNS44NDQ5VjMxLjk2MjRIMTkuNTMwNlpNMjMuMTUyOCAzMS45NjI0QzIzLjE1MjggMzAuOTU0OSAyMi4zOTAyIDMwLjA1NDUgMjEuMzk0NyAyOS45NDczQzIxLjIyNTIgMzAuNTkwNCAyMS4wOTgxIDMxLjI1NSAyMS4wOTgxIDMxLjk2MjRIMjMuMTUyOFpNMjMuMTUyOCAzMy42MzQ1SDIxLjMzMTFDMjEuNjI3NyAzNC45NDIyIDIyLjI2MzEgMzYuMTIxMyAyMy4xNTI4IDM3LjE1MDNWMzMuNjM0NVpNMjUuNzM3IDI4LjQ2ODFDMjUuMDM4IDI3LjE2MDQgMjQuMzgxNCAyNS43ODg0IDIzLjk3ODkgMjQuMzczNUMyMy41NzY0IDI1LjgwOTkgMjIuOTE5OCAyNy4xNjA0IDIyLjIyMDggMjguNDY4MUMyMi45MTk4IDI4LjYzOTYgMjMuNTEyOSAyOS4xMTEyIDIzLjk3ODkgMjkuNjQ3MkMyNC40NDQ5IDI5LjExMTIgMjUuMDM4IDI4LjYzOTYgMjUuNzM3IDI4LjQ2ODFaTTI2Ljg1OTcgMzEuOTYyNEMyNi44NTk3IDMxLjI1NSAyNi43MzI2IDMwLjU5MDQgMjYuNTYzMSAyOS45NDczQzI1LjU2NzYgMzAuMDc1OSAyNC44MDUgMzAuOTU0OSAyNC44MDUgMzEuOTYyNEgyNi44NTk3Wk0yNi42MjY3IDMzLjYzNDVIMjQuODA1VjM3LjE1MDNDMjUuNjk0NyAzNi4xMjEzIDI2LjMzMDEgMzQuOTQyMiAyNi42MjY3IDMzLjYzNDVaTTMyLjE1NTIgMzEuOTYyNFYyNy4wMzE4SDMxLjIyMzJDMzAuOTI2NyAyOC4xNjggMzAuMDU4MiAyOS4wNDY5IDI4LjkzNTUgMjkuNDExNEwyOC4xNzMgMjkuNTgyOUMyOC4zNDI0IDMwLjM1NDYgMjguNDY5NSAzMS4xMjY0IDI4LjQ2OTUgMzEuOTYyNEgzMi4xNTUyWk0zMi4xNTUyIDI1LjM4MTFWMTMuMjA0NkMzMS4wOTYxIDE0LjQ0OCAzMC4zMzM2IDE1Ljk5MTUgMzAuMTY0MSAxNy43Mjc5TDI5LjUwNzUgMjMuMjU4OEMzMC4zMzM2IDIzLjczMDQgMzAuOTY5IDI0LjUwMjIgMzEuMjAyIDI1LjQwMjVIMzIuMTU1MlYyNS4zODExWiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg=="
+  logoFavicon: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJRSURBVHgBxZf/sWkxEMdz37z/0QEVoAMqQAWogA5QASqgAzpABaiADlBBXj6Zt2dyI87vO/c7k0lmd5N8zya7e/KlDdQv4o/6ZRQisN1u1Xq9VkXwVeQIGo2G7W+3m8oNHYPJZKLN4kHd4/GAuG2MQ2DuarXScYg9guv1qtrttrpcLm+65/MZHAuY82mui8Q7wOLdblfd7/dv8nq9HhwDbJkTIpaZQKvVUtVqVY3H4zcd8hCwRecTy0WAhTabjToej7b5On8TsZvP5+UQAJ1Oxy4WCjnfC4QmtsPhUKVB6jzQ7/ffPMBGPgEuLrZpkZpAs9m0lyrpYnHr07g+M4FarWb7OAIScpAtnYAs6sa17xEZf4qOEP6mNZRFX69XJIOMuxnnD37kCNiIJh6Qnq+Wy8lY7EonQHJxXX46nSKdjM/ns9WHktZHxBUKE//aZEJtkootOiYhRTrjZqsXG8FyubS2Jh9Y+Wg0ii1GiQTU/4rHhoLD4RBtAinGyATmCKJ5hQnQdrudXQxPUGKRuYTEG5Tl6XRqbZlTigdoYDabRV9FQw4ZIeTqsJX5SQRShyHFxSymBoOBLbdScgEXT0LPHMXPhCFgYTYzbrYbSURw+yX/Z9kcJHqAeHfDii/f7/e2J94hsVgsrB0y3zaJUCwBJrOIXwWRsbGQQC/e8G0rlYqKhc6IXq8XRYB7SZGZY9BZkfldwEX0vcJPCLIs/wGCXO8C/nYl77vVMNf7QOcAse9mO8af3g9JyEVASHDuNBOGOi8KPc3krZA19l0UIlAG/gFbaE93sBpBTQAAAABJRU5ErkJggg=="

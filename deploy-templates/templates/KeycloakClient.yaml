@@ -1,5 +1,6 @@
 {{- $root := .Values }}
 {{- $release := .Release }}
+{{- $region := $root.global.region }}
 {{- range $client := .Values.keycloak.clients }}
 ---
 apiVersion: v1.edp.epam.com/v1
@@ -42,11 +43,13 @@ spec:
     {{- end }}
   secret: {{ $client.secretName }}
   {{- end }}
-  {{- if $client.protocolMappers }}
+  {{- if and $client.protocolMappersGlobal (eq $region "global") }}
+  protocolMappers: {{ $client.protocolMappersGlobal | toYaml | nindent 4 }}
+  {{- else if $client.protocolMappers }}
   protocolMappers: {{ $client.protocolMappers | toYaml | nindent 4 }}
   {{- end }}
   targetRealm: {{ template "keycloak.realmName" (dict "root" $ "realm" $client.targetRealm "release" $release) }}
   {{- if $client.webUrl }}
   webUrl: {{ tpl $client.webUrl $ }}
   {{- end }}
-{{- end }}
+  {{- end }}
