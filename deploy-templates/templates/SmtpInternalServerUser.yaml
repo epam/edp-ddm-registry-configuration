@@ -25,6 +25,7 @@ data:
     {{- $userManagementCommand = (printf "flask mailu user-delete %s@%s" $username $smtpServerDomain) }}
   {{- end }}
 ---
+{{- if not (lookup "batch/v1" "Job" $smtpServerNamespace $jobName) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -45,5 +46,6 @@ spec:
           command: ["/bin/sh"]
           args:
             - '-c'
-            - oc -n {{ $smtpServerNamespace }} exec $(oc -n {{ $smtpServerNamespace }} get pods -l component=admin --no-headers -o custom-columns=NAME:metadata.name) {{ $userManagementCommand }}
+            - oc -n {{ $smtpServerNamespace }} exec $(oc -n {{ $smtpServerNamespace }} get pods -l component=admin --no-headers -o custom-columns=NAME:metadata.name) -- {{ $userManagementCommand }}
+{{- end }}
 {{- end }}

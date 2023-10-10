@@ -1,6 +1,6 @@
 {{- range $dataComponent := .Values.dataComponents.codebases }}
 ---
-apiVersion: v2.edp.epam.com/v1alpha1
+apiVersion: v2.edp.epam.com/v1
 kind: Codebase
 metadata:
   name: {{ $dataComponent.name }}
@@ -9,8 +9,9 @@ metadata:
 spec:
   jenkinsSlave: {{ $dataComponent.jenkinsAgent }}
   defaultBranch: {{ $dataComponent.codebaseBranch }}
+  gitUrlPath: /{{ $dataComponent.name }}
   buildTool: {{ $dataComponent.buildTool }}
-  ciTool: Jenkins
+  ciTool: jenkins
   versioning:
     startFrom: {{ $dataComponent.version }}
     type: edp

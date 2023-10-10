@@ -4,17 +4,21 @@ metadata:
   name: registry-regulations
 data:
   registry-regulations: |
-    apiVersion: v2.edp.epam.com/v1alpha1
+    apiVersion: v2.edp.epam.com/v1
     kind: Codebase
     metadata:
       name: registry-regulations
+      annotations:
+        meta.helm.sh/release-name: {{ include "codebases.release.name" . }}
+        meta.helm.sh/release-namespace: {{ .Release.Namespace }}
       labels:
         recreateByCleanup: "true"
+        app.kubernetes.io/managed-by: Helm
     spec:
       emptyProject: false
       commitMessagePattern: null
       jenkinsSlave: dataplatform-jenkins-agent
-      gitUrlPath: null
+      gitUrlPath: /registry-regulations
       defaultBranch: master
     {{- if eq .Values.edpProject "control-plane" }}
       branchToCopyInDefaultBranch: {{ .Values.codebases.registryRegulations.registryRegulationsRepoVersion }}
@@ -44,20 +48,20 @@ data:
       type: library
       database: null
       description: null
-      framework: null
-      ciTool: Jenkins
+      framework: ''
+      ciTool: jenkins
     ---
-    apiVersion: v2.edp.epam.com/v1alpha1
+    apiVersion: v2.edp.epam.com/v1
     kind: CodebaseBranch
     metadata:
-    {{- if eq .Values.edpProject "control-plane" }}
       name: registry-regulations-master
-    {{- else }}
-      name: registry-regulations-{{ .Values.registryRegulations.registryRegulationsRepoVersion | toString | replace "." "-" | replace "/" "-" | lower }}
-    {{- end }}
+      annotations:
+        meta.helm.sh/release-name: {{ include "codebases.release.name" . }}
+        meta.helm.sh/release-namespace: {{ .Release.Namespace }}
       labels:
         affiliatedWith: "registry-regulations"
         recreateByCleanup: "true"
+        app.kubernetes.io/managed-by: Helm
     spec:
       branchName: master
       codebaseName: registry-regulations

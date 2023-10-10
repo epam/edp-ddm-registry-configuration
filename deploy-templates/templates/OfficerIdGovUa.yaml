@@ -52,6 +52,7 @@ spec:
   config:
     clientId: ''
     clientSecret: ''
+    keyName: {{ .Values.keycloak.identityProviders.idGovUa.keyName | default "key" }}
     url: {{ $root.keycloak.identityProviders.idGovUa.url }}
     hideOnLoginPage: "true"
     dsoCertificateUrl: http://digital-signature-ops:8080/api/key/certificate

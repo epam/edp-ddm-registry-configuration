@@ -106,16 +106,16 @@ spec:
 apiVersion: v1.edp.epam.com/v1
 kind: KeycloakRealmIdentityProvider
 metadata:
-  name: citizen-id-gov-ua
+  name: citizen-platform-id-gov-ua
   annotations:
     "helm.sh/resource-policy": keep
   labels:
     created-by: {{ .Values.appLabel }}
 spec:
   realm: citizen-portal
-  alias: idgovua
+  alias: platform-id-gov-ua
   authenticateByDefault: true
-  enabled: true
+  enabled: {{ ne .Values.global.region "global" }}
   firstBrokerLoginFlowAlias: "id-gov-ua"
   providerId: "keycloak-oidc"
   config:
@@ -153,6 +153,49 @@ spec:
         claim: "realm"
         "user.attribute": "oidc-realm"
         syncMode: "INHERIT"
+{{- if eq .Values.keycloak.citizenAuthFlow.authType "registry-id-gov-ua" }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: citizen-id-gov-ua-client-external-secrets
+spec:
+  dataFrom:
+    - extract:
+        conversionStrategy: Default
+        decodingStrategy: None
+        key: {{ .Values.keycloak.citizenAuthFlow.registryIdGovUa.clientId }}
+  refreshInterval: 10s
+  secretStoreRef:
+    kind: SecretStore
+    name: central-vault-secret-store
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    name: citizen-id-gov-ua-client-secret
+---
+apiVersion: v1.edp.epam.com/v1alpha1
+kind: KeycloakRealmIdentityProvider
+metadata:
+  name: citizen-registry-id-gov-ua
+spec:
+  realm: citizen-portal
+  alias: registry-id-gov-ua
+  authenticateByDefault: true
+  enabled: true
+  firstBrokerLoginFlowAlias: "id-gov-ua"
+  providerId: "idgovuav2"
+  config:
+    clientId: {{ .Values.keycloak.citizenAuthFlow.registryIdGovUa.clientId }}
+    clientSecret: {{ .Values.keycloak.citizenAuthFlow.registryIdGovUa.clientSecret }}
+    keyName: {{ .Values.keycloak.citizenAuthFlow.registryIdGovUa.keyName }}
+    hideOnLoginPage: "false"
+    dsoCertificateUrl: http://digital-signature-ops:8080/api/key/certificate
+    dsoDecryptInfoUrl: http://digital-signature-ops:8080/api/key/decrypt
+    url: {{ .Values.keycloak.citizenAuthFlow.registryIdGovUa.url }}
+    syncMode: "IMPORT"
+    useJwksUrl: "true"
+{{- end }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1

@@ -1,5 +1,6 @@
 {{- $root := .Values }}
 {{- $release := .Release }}
+{{- $region := $root.global.region }}
 {{- range $realm := .Values.keycloak.realms }}
 ---
 apiVersion: v1.edp.epam.com/v1
@@ -16,18 +17,19 @@ spec:
   {{- if or (eq $realm.name "citizen-portal")  (eq $realm.name "officer-portal") }}
   frontendUrl: {{ template "keycloak.frontendUrl" $ }}
   {{- end }}
-  ssoRealmEnabled: {{ $realm.ssoRealm.enabled }}
-  {{- if $realm.ssoRealm.enabled }}
+  ssoRealmEnabled: {{ and $realm.ssoRealm.enabled (or (ne $region "global") (eq $realm.name "admin")) }}
+  {{- if and $realm.ssoRealm.enabled (or (ne $region "global") (eq $realm.name "admin")) }}
   ssoAutoRedirectEnabled: {{ $realm.ssoRealm.autoRedirectEnabled }}
   ssoRealmName: {{ tpl $realm.ssoRealm.name $ }}
-  {{- if eq $realm.name "officer-portal" }}
-  realmEventConfig: {{ $realm.realmEventConfig | toYaml | nindent 4 }}
-  {{- end }}
+  realmEventConfig: {{ $root.keycloak.realmEventConfig | toYaml | nindent 4 }}
   {{- end }}
   {{- if $realm.users }}
   users: {{ $realm.users | toYaml | nindent 4 }}
   {{- end }}
-  {{- if $realm.loginTheme }}
+  {{- if eq $region "global" }}
+  themes:
+    loginTheme: keycloak
+  {{- else if $realm.loginTheme }}
   themes:
     loginTheme: {{ $realm.loginTheme }}
   {{- end }}
@@ -39,7 +41,9 @@ spec:
     contentSecurityPolicy: "frame-src 'self' https://{{ (urlParse $root.signWidget.url).host }}; frame-ancestors 'self'; object-src 'none';"
     {{- end }}
   {{- end }}
-  {{- if eq $realm.name "officer-portal" }}
+  {{- if eq $region "global" }}
+  browserFlow: browser
+  {{- else if eq $realm.name "officer-portal" }}
   browserFlow: {{ $root.keycloak.realms.officerPortal.browserFlow }}
   {{- else }}
   {{- if $realm.browserFlow }}
@@ -47,3 +51,4 @@ spec:
   {{- end }}
   {{- end }}
   {{- end }}
+
