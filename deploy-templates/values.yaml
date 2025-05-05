@@ -71,64 +71,38 @@ keycloak:
           protocol: openid-connect
           protocolMapper: oidc-usermodel-realm-role-mapper
 
-    bpmsRealmAdminCitizenPortal:
-      name: bpms-realm-admin-citizen-portal
-      clientId: realm-admin
+    bpmsUserManagementCitizenPortal:
+      name: bpms-user-management-citizen-portal
+      clientId: bpms-user-management
       public: false
-      secretName: keycloak-realm-admin-citizen-client-secret
+      protocol: openid-connect
+      secretName: keycloak-user-management-citizen-client-secret
       targetRealm:
         name: citizen-portal
       serviceAccountClientRoles:
       - clientId: realm-management
         roles:
-          - manage-clients
-          - manage-events
-          - create-client
-          - manage-authorization
-          - manage-identity-providers
-          - manage-realm
-          - manage-users
-          - query-clients
-          - query-groups
-          - query-realms
-          - query-users
-          - view-authorization
-          - view-clients
-          - view-events
-          - view-identity-providers
           - view-realm
+          - manage-users
           - view-users
       webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
       directAccess: false
       audRequired: false
 
-    bpmsRealmAdminOfficerPortal:
-      name: bpms-realm-admin-officer-portal
-      clientId: realm-admin
+    bpmsUserManagementOfficerPortal:
+      name: bpms-user-management-officer-portal
+      clientId: bpms-user-management
       public: false
-      secretName: keycloak-realm-admin-officer-client-secret
+      protocol: openid-connect
+      secretName: keycloak-user-management-officer-client-secret
       targetRealm:
         name: officer-portal
       serviceAccountClientRoles:
-      - clientId: realm-management
-        roles:
-          - manage-clients
-          - manage-events
-          - create-client
-          - manage-authorization
-          - manage-identity-providers
-          - manage-realm
-          - manage-users
-          - query-clients
-          - query-groups
-          - query-realms
-          - query-users
-          - view-authorization
-          - view-clients
-          - view-events
-          - view-identity-providers
-          - view-realm
-          - view-users
+        - clientId: realm-management
+          roles:
+            - view-realm
+            - view-users
+            - manage-users
       webUrl: "https://bpms-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
       directAccess: false
       audRequired: false
@@ -147,23 +121,6 @@ keycloak:
             - manage-realm
             - view-clients
             - view-users
-      directAccess: false
-      audRequired: false
-
-    userAttributesManagementClientOfficerPortal:
-      name: user-attributes-management
-      clientId: user-attributes-management
-      public: false
-      protocol: openid-connect
-      secretName: keycloak-realm-officer-user-attributes-management-client-secret
-      targetRealm:
-        name: officer-portal
-      serviceAccountClientRoles:
-        - clientId: realm-management
-          roles:
-            - manage-realm
-            - view-users
-            - manage-users
       directAccess: false
       audRequired: false
 
@@ -368,23 +325,6 @@ keycloak:
             - query-users
             - view-users
 
-    camundaCockpitOfficerPortal:
-      name: camunda-cockpit-officer-portal
-      clientId: camunda-cockpit
-      public: false
-      secretName: keycloak-client-camunda-cockpit-officer-portal-secret
-      targetRealm:
-        name: officer-portal
-      webUrl: "https://business-proc-admin-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}"
-      directAccess: false
-      audRequired: false
-      serviceAccountClientRoles:
-        - clientId: realm-management
-          roles:
-            - query-groups
-            - query-users
-            - view-users
-
     jenkinsDeployer:
       name: jenkins-deployer
       clientId: jenkins-deployer
@@ -397,6 +337,36 @@ keycloak:
       audRequired: false
       realmRoles:
         - camunda-admin
+
+    notificationServiceUserViewerCitizenPortal:
+      name: notification-service-user-viewer-citizen-portal
+      clientId: notification-service-user-viewer
+      public: false
+      protocol: openid-connect
+      secretName: keycloak-user-viewer-citizen-client-secret
+      targetRealm:
+        name: citizen-portal
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - view-users
+      directAccess: false
+      audRequired: false
+
+    notificationServiceUserViewerOfficerPortal:
+      name: notification-service-user-viewer-officer-portal
+      clientId: notification-service-user-viewer
+      public: false
+      protocol: openid-connect
+      secretName: keycloak-user-viewer-officer-client-secret
+      targetRealm:
+        name: officer-portal
+      serviceAccountClientRoles:
+        - clientId: realm-management
+          roles:
+            - view-users
+      directAccess: false
+      audRequired: false
 
     officerPortal:
       name: officer-portal

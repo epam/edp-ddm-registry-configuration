@@ -44,7 +44,7 @@ void call() {
 }
 
 String executeRedisCommand(String redisPod, String redisPassword, String command) {
-    return sh(script: "oc exec ${redisPod} -n ${NAMESPACE} -- redis-cli -a ${redisPassword} ${command}", returnStdout: true).trim()
+    return sh(script: "set +x; oc exec ${redisPod} -n ${NAMESPACE} -- redis-cli -a ${redisPassword} ${command}", returnStdout: true).trim()
 }
 
 return this;

@@ -129,3 +129,118 @@ haproxy.router.openshift.io/ip_whitelist: {{ (include "admin-routes.whitelist.ci
 {{- .Values.assets.logoFavicon }}
 {{- end -}}
 {{- end -}}
+
+{{- define "redisServiceName" -}}
+{{- $generated := get .Values.kongRedis "_generatedRedisServiceName" | default "" -}}
+{{- if not $generated -}}
+{{- $suffix := randAlpha 5 | lower -}}
+{{- $name := printf "%s-%s" .Values.kongRedis.serviceName $suffix -}}
+{{- $_ := set .Values.kongRedis "_generatedRedisServiceName" $name -}}
+{{- end -}}
+{{- get .Values.kongRedis "_generatedRedisServiceName" -}}
+{{- end -}}
+
+{{- define "externalS3.enabled" -}}
+{{- if (hasKey .Values.global "externalS3") -}}
+true
+{{- else -}}
+false
+{{- end -}}
+{{- end -}}
+
+{{- define "externalS3.validate" -}}
+{{- $ext := .Values.global.externalS3 -}}
+{{- if not $ext.endpoint -}}
+  {{- fail "global.externalS3.endpoint is required" -}}
+{{- end -}}
+{{- if not $ext.buckets -}}
+  {{- fail "global.externalS3.buckets must be defined" -}}
+{{- end -}}
+{{- if not (gt (len $ext.buckets) 0) -}}
+  {{- fail "global.externalS3.buckets must contain at least one of: file, datafactory" -}}
+{{- end -}}
+{{- $valid := list "file" "datafactory" -}}
+{{- $ns := .Release.Namespace -}}
+{{- range $k, $cfg := $ext.buckets -}}
+  {{- if not (has $k $valid) -}}
+    {{- fail (printf "Invalid bucket key '%s'. Allowed keys: file, datafactory" $k) -}}
+  {{- end -}}
+  {{- if or (not (hasKey $cfg "name")) (eq (toString $cfg.name | trim) "") -}}
+    {{- fail (printf "global.externalS3.buckets.%s.name is required" $k) -}}
+  {{- end -}}
+  {{- if or (not (hasKey $cfg "secretRef")) (eq (tpl (toString (index $cfg "secretRef")) $ | trim) "") -}}
+    {{- fail (printf "global.externalS3.buckets.%s.secretRef is required" $k) -}}
+  {{- end -}}
+  {{- $secretName := tpl (toString $cfg.secretRef) $ | trim -}}
+  {{- $secret := lookup "v1" "Secret" $ns $secretName -}}
+  {{- if not $secret -}}
+    {{- fail (printf "Secret %s not found in namespace %s" $secretName $ns) -}}
+  {{- end -}}
+  {{- $d := $secret.data -}}
+  {{- if or (not $d) (not (hasKey $d "AWS_ACCESS_KEY_ID")) -}}
+    {{- fail (printf "Secret %s must contain AWS_ACCESS_KEY_ID" $secretName) -}}
+  {{- end -}}
+  {{- if eq (trim (b64dec (index $d "AWS_ACCESS_KEY_ID"))) "" -}}
+    {{- fail (printf "Secret %s must contain non-empty AWS_ACCESS_KEY_ID" $secretName) -}}
+  {{- end -}}
+  {{- if or (not $d) (not (hasKey $d "AWS_SECRET_ACCESS_KEY")) -}}
+    {{- fail (printf "Secret %s must contain AWS_SECRET_ACCESS_KEY" $secretName) -}}
+  {{- end -}}
+  {{- if eq (trim (b64dec (index $d "AWS_SECRET_ACCESS_KEY"))) "" -}}
+    {{- fail (printf "Secret %s must contain non-empty AWS_SECRET_ACCESS_KEY" $secretName) -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "externalS3.endpoint" -}}
+{{- required "global.externalS3.endpoint is required" .Values.global.externalS3.endpoint -}}
+{{- end -}}
+
+{{- define "externalS3.authority" -}}
+{{- $ep := include "externalS3.endpoint" . | trim -}}
+{{- $noScheme := $ep | trimPrefix "https://" | trimPrefix "http://" -}}
+{{- index (splitList "/" $noScheme) 0 -}}
+{{- end -}}
+
+{{- define "externalS3.port" -}}
+{{- $parts := .parts -}}
+{{- if gt (len $parts) 1 -}}
+{{- index $parts 1 -}}
+{{- else -}}
+443
+{{- end -}}
+{{- end -}}
+
+{{- define "externalS3.scheme" -}}
+{{- $vals := .Values | default dict -}}
+{{- $global := (hasKey $vals "global") | ternary $vals.global (dict) -}}
+{{- $ext := (hasKey $global "externalS3") | ternary $global.externalS3 (dict) -}}
+{{- $ca := (hasKey $ext "caSecretRef") | ternary (tpl (toString $ext.caSecretRef) . | trim) "" -}}
+{{- if ne $ca "" -}}
+http
+{{- else -}}
+https
+{{- end -}}
+{{- end -}}
+
+{{- define "externalS3.effectivePort" -}}
+{{- $root := .root -}}
+{{- $parts := .parts -}}
+{{- $vals := $root.Values | default dict -}}
+{{- $global := (hasKey $vals "global") | ternary $vals.global (dict) -}}
+{{- $ext := (hasKey $global "externalS3") | ternary $global.externalS3 (dict) -}}
+{{- $ca := (hasKey $ext "caSecretRef") | ternary (tpl (toString $ext.caSecretRef) $root | trim) "" -}}
+{{- if ne $ca "" -}}
+80
+{{- else -}}
+{{- include "externalS3.port" (dict "parts" $parts) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "externalS3.bucketName" -}}
+{{- $map := dict
+    "datafactory"     "datafactory-external-s3-bucket"
+    "file"            "file-external-s3-bucket"
+-}}
+{{- index $map . -}}
+{{- end -}}

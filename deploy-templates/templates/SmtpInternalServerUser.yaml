@@ -5,6 +5,7 @@
   {{- $password := "" }}
   {{- $jobName := "" }}
   {{- $userManagementCommand := "" }}
+  {{- $secretName := "smtp-internal-credentials" }}
   {{- if eq .Values.global.notifications.email.type "internal" }}
     {{- $secretName := "smtp-internal-credentials" }}
     {{- $password = include "smtp-internal-password" (dict "secretName" $secretName "namespace" .Release.Namespace) }}
@@ -25,7 +26,7 @@ data:
     {{- $userManagementCommand = (printf "flask mailu user-delete %s@%s" $username $smtpServerDomain) }}
   {{- end }}
 ---
-{{- if not (lookup "batch/v1" "Job" $smtpServerNamespace $jobName) }}
+{{- if not (lookup "v1" "Secret" .Release.Namespace $secretName) }}
 apiVersion: batch/v1
 kind: Job
 metadata:

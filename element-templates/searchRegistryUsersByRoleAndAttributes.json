@@ -1,6 +1,6 @@
 {
-  "name": "[DEPRECATED] Search registry users by attributes",
-  "id": "searchRegistryUsersByAttributes",
+  "name": "Search registry users",
+  "id": "searchRegistryUsersByRoleAndAttributes",
   "appliesTo": [
     "bpmn:ServiceTask"
   ],
@@ -8,7 +8,7 @@
     {
       "label": "Implementation Type",
       "type": "Hidden",
-      "value": "${searchRegistryUsersByAttributes}",
+      "value": "${searchRegistryUsersByRoleAndAttributes}",
       "editable": false,
       "binding": {
         "type": "property",
@@ -38,6 +38,52 @@
       }
     },
     {
+      "label": "Status",
+      "description": "Retrieve users based on the specified Keycloak account status",
+      "type": "Dropdown",
+      "choices": [
+        {
+          "name": "ALL",
+          "value": "all"
+        },
+        {
+          "name": "ENABLED",
+          "value": "true"
+        },
+        {
+          "name": "DISABLED",
+          "value": "false"
+        }
+      ],
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "status"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Username",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "username"
+      }
+    },
+    {
+      "label": "Role name",
+      "description": "Keycloak role name",
+      "type": "String",
+      "binding": {
+        "type": "camunda:inputParameter",
+        "name": "role_name"
+      },
+      "constraints": {
+        "type": "role.name"
+      }
+    },
+    {
       "label": "Attributes Equals",
       "description": "Map of the attributes for exact match search",
       "binding": {
@@ -63,20 +109,21 @@
     },
     {
       "label": "Limit",
-      "description": "How many users have to been found. If not set or <= 0 then will return whole user list. It's recommended to use for search for users in citizen realm",
+      "description": "Number of users to retrieve, hard limit is 100. If unspecified, less than 0, or exceeds, hard limit will be applied",
       "type": "String",
       "binding": {
         "type": "camunda:inputParameter",
         "name": "limit"
-      }
+      },
+      "value": "100"
     },
     {
-      "label": "Continue token",
-      "description": "Token that points at the start of the page. Every users response from this extension will have continueToken point to the next page that has to be used here. On the last page it will return -1 as continueToken.",
+      "label": "Offset",
+      "description": "Number of users to skip before returning results. Defaults to 0 if not provided",
       "type": "String",
       "binding": {
         "type": "camunda:inputParameter",
-        "name": "continueToken"
+        "name": "offset"
       }
     },
     {

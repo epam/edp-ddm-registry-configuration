@@ -1,0 +1,15 @@
+{{- if eq (include "externalS3.enabled" .) "true" -}}
+{{- include "externalS3.validate" . -}}
+{{- $endpointParts := splitList ":" (include "externalS3.authority" .) -}}
+{{- range $bucketName, $bucketConfig := .Values.global.externalS3.buckets }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "externalS3.bucketName" $bucketName }}
+data:
+  BUCKET_HOST: {{ printf "%s://%s" (include "externalS3.scheme" $ | trim) (index $endpointParts 0) | quote }}
+  BUCKET_NAME: {{ $bucketConfig.name | quote }}
+  BUCKET_PORT: {{ include "externalS3.effectivePort" (dict "root" $ "parts" $endpointParts) | quote }}
+{{- end -}}
+{{- end -}}

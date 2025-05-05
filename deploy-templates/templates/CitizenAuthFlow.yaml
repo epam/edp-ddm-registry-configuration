@@ -48,7 +48,11 @@ spec:
           esignHintUrl: https://diia.gov.ua/faq/1
           legalDefaultRoles: citizen;unregistered-legal;
           startPageUrl: >-
+            {{- if .Values.portals.citizen.customDns.enabled }}
+            https://{{ .Values.portals.citizen.customDns.host }}/login
+            {{- else }}
             https://citizen-portal-{{ .Values.cdPipelineName }}-{{ .Values.cdPipelineStageName }}.{{ .Values.dnsWildcard }}/login
+            {{- end }}
 {{- if .Values.trembita }}
   {{- if (index (index .Values.trembita.registries "edr-registry") "user-id") }}
   {{- $trembitaConfig := index (index .Values.trembita.registries "edr-registry") }}
